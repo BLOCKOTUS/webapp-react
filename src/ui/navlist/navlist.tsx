@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import {
     Link,
 } from "react-router-dom";
@@ -13,7 +14,7 @@ type NavListProps = {
 
 const NavList = ({
     items
-}: NavListProps) => {
+}: NavListProps): ReactElement => {
     return (
         <ul>
             {
