@@ -1,5 +1,6 @@
-import { ReactElement } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import type { ReactElement } from 'react';
 
 const BackwardButton = (): ReactElement => {
     let history = useHistory();

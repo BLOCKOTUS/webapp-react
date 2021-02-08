@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,6 +7,8 @@ import {
 
 import NavList from './ui/navlist';
 import BackwardButton from './ui/backward-button';
+
+import type { ReactElement } from 'react';
 
 import './App.css';
 
