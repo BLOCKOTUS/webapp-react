@@ -39,7 +39,7 @@ export default function App() {
       </div>
     </Router>
   );
-}
+;}
 
 const Home = (): ReactElement => {
   const navItems = [
@@ -56,7 +56,7 @@ const Home = (): ReactElement => {
       <NavList items={navItems} />
     </div>
   );
-}
+};
 
 const Register = (): ReactElement => {
   return (
@@ -66,7 +66,7 @@ const Register = (): ReactElement => {
       <BackwardButton />
     </div>
   );
-}
+};
 
 const Login = (): ReactElement => {
   return (
@@ -76,7 +76,7 @@ const Login = (): ReactElement => {
       <BackwardButton />
     </div>
   );
-}
+};
 
 const Accounts = (): ReactElement => {
   return (
@@ -85,4 +85,4 @@ const Accounts = (): ReactElement => {
       <BackwardButton />
     </div>
   );
-}
+};

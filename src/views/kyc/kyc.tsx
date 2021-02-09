@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 
 import BackwardButton from '../../ui/backward-button';
+import CreateIdentityForm from '../../ui/create-identity-form';
 import NavList from '../../ui/navlist';
 
 import type { ReactElement } from 'react';
@@ -28,7 +29,7 @@ const Kyc = (): ReactElement => {
         </Switch>
       </div>
     );
-}
+};
 
 const Init = (): ReactElement => {
   const navItems = [
@@ -45,7 +46,7 @@ const Init = (): ReactElement => {
       <BackwardButton />
     </div>
   );
-}
+};
 
 const Me = (): ReactElement => {
   return (
@@ -54,16 +55,17 @@ const Me = (): ReactElement => {
       <BackwardButton />
     </div>
   );
-}
+};
 
 const Create = (): ReactElement => {
   return (
     <div>
       <h2>Create</h2>
+      <CreateIdentityForm />
       <BackwardButton />
     </div>
   );
-}
+};
 
 const Jobs = (): ReactElement => {
   return (
@@ -72,6 +74,6 @@ const Jobs = (): ReactElement => {
       <BackwardButton />
     </div>
   );
-}
+};
 
 export default Kyc;
