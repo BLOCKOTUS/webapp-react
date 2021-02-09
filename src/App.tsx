@@ -7,6 +7,7 @@ import {
 
 import NavList from './ui/navlist';
 import BackwardButton from './ui/backward-button';
+import RegisterForm from './ui/register-form';
 
 import type { ReactElement } from 'react';
 
@@ -60,6 +61,7 @@ const Register = (): ReactElement => {
   return (
     <div>
       <h2>Register</h2>
+      <RegisterForm />
       <BackwardButton />
     </div>
   );

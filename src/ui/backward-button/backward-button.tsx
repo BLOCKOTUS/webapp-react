@@ -4,7 +4,7 @@ import type { ReactElement } from 'react';
 
 const BackwardButton = (): ReactElement => {
     let history = useHistory();
-    return (<span onClick={() => history.goBack()}>Go back</span>);
+    return (<button type="button" onClick={() => history.goBack()}>Go back</button>);
         
 };
 
