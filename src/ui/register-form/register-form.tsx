@@ -1,3 +1,7 @@
+import { useState } from 'react';
+
+import InfoBar from '../info-bar';
+
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 
 import type { ReactElement } from 'react';
@@ -15,8 +19,17 @@ const onSubmit = (
 }
 
 const RegisterForm = (): ReactElement => {
+    const [infoType, setInfoType] = useState<'error' | 'info' | ''>('');
+    const [infoValue, setInfoValue] = useState('');
+    const [infoLoading, setInfoLoading] = useState(false);
+
     return (
         <div>
+            <InfoBar 
+                type={infoType}
+                value={infoValue}
+                loading={infoLoading}
+            />
             <Formik
                 initialValues={{
                     username: '',
