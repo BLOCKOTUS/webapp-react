@@ -1,3 +1,8 @@
+import {
+  Switch,
+  Route,
+} from "react-router-dom";
+
 import BackwardButton from '../../ui/backward-button';
 import NavList from '../../ui/navlist';
 
@@ -5,20 +10,68 @@ import type { ReactElement } from 'react';
 
 
 const Kyc = (): ReactElement => {
-    const navItems = [
-      { label: 'Home', to: '/' },
-      { label: 'My identity', to: '/kyc/me' },
-      { label: 'Create identity', to: '/kyc/create' },
-      { label: 'Verification jobs', to: '/kyc/jobs' },
-    ];
-  
     return (
       <div>
-        <h2>KYC</h2>
-        <NavList items={navItems} />
-        <BackwardButton />
+        <Switch>
+          <Route exact path="/kyc">
+            <Init />
+          </Route>
+          <Route path="/kyc/me">
+            <Me />
+          </Route>
+          <Route path="/kyc/create">
+            <Create />
+          </Route>
+          <Route path="/kyc/jobs">
+            <Jobs />
+          </Route>
+        </Switch>
       </div>
     );
 }
 
-  export default Kyc;
+const Init = (): ReactElement => {
+  const navItems = [
+    { label: 'Home', to: '/' },
+    { label: 'My identity', to: '/kyc/me' },
+    { label: 'Create identity', to: '/kyc/create' },
+    { label: 'Verification jobs', to: '/kyc/jobs' },
+  ];
+
+  return (
+    <div>
+      <h2>KYC</h2>
+      <NavList items={navItems} />
+      <BackwardButton />
+    </div>
+  );
+}
+
+const Me = (): ReactElement => {
+  return (
+    <div>
+      <h2>Me</h2>
+      <BackwardButton />
+    </div>
+  );
+}
+
+const Create = (): ReactElement => {
+  return (
+    <div>
+      <h2>Create</h2>
+      <BackwardButton />
+    </div>
+  );
+}
+
+const Jobs = (): ReactElement => {
+  return (
+    <div>
+      <h2>Jobs</h2>
+      <BackwardButton />
+    </div>
+  );
+}
+
+export default Kyc;
