@@ -6,9 +6,10 @@ import {
 } from "react-router-dom";
 
 import BackwardButton from './ui/backward-button';
-import NavList from './ui/navlist';
 import LoginForm from './ui/login-form';
+import NavList from './ui/navlist';
 import RegisterForm from './ui/register-form';
+import Kyc from './views/kyc';
 
 import type { ReactElement } from 'react';
 
@@ -82,15 +83,6 @@ const Accounts = (): ReactElement => {
   return (
     <div>
       <h2>Accounts</h2>
-      <BackwardButton />
-    </div>
-  );
-}
-
-const Kyc = (): ReactElement => {
-  return (
-    <div>
-      <h2>KYC</h2>
       <BackwardButton />
     </div>
   );
