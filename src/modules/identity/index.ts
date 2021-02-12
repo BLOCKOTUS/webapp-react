@@ -2,7 +2,7 @@ import { Crypt } from 'hybrid-crypto-js';
 import { isEqual } from 'lodash';
 import type { AxiosResponse } from 'axios';
 
-import appConfig from '@@Config/app';
+import appConfig from '../../config/app';
 import { request } from '../nerves';
 import { generateKeyPair, uniqueHashFromIdentity } from '../crypto';
 import { makeInfoProps } from '../info';
@@ -337,9 +337,9 @@ export const decryptIdentity = (
 export const canApproveIdentityVerificationJob = (
     verificationJob: [IdentityTypeWithKYC, IdentityTypeWithKYC] | null,
 ): boolean => 
-    verificationJob
-    && verificationJob[0].uniqueHash === verificationJob[1].uniqueHash
-    && isEqual(verificationJob[0], verificationJob[1]);
+    Boolean(verificationJob
+        && verificationJob[0].uniqueHash === verificationJob[1].uniqueHash
+        && isEqual(verificationJob[0], verificationJob[1]));
 
 /**
  * Used for the onClick event of the `submit` button for submitting a new identity.

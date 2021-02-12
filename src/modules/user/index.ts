@@ -1,7 +1,7 @@
 import type { AxiosResponse } from 'axios';
 import { Crypt } from 'hybrid-crypto-js';
 
-import appConfig from '@@Config/app';
+import appConfig from '../../config/app';
 import { request } from '../nerves';
 import type { RequestReponseObject } from '../nerves';
 import type { Encrypted, Keypair } from '../crypto';
@@ -37,7 +37,7 @@ export type User = {
 export type UsersType = {
     loggedInUser: string;
     users: Array<User>;
-    tmp: User;
+    tmp: User | null;
 };
 
 /**
@@ -72,7 +72,7 @@ const crypt = new Crypt();
  */
 const makeSharedWithObjectForWorkers = (
     {
-        workersIds,
+        workersIds = [],
         keypairToShare,
     }: {
         workersIds?: Array<WorkerType>,

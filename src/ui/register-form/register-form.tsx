@@ -5,7 +5,7 @@ import InfoBar from '../info-bar';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 
 import type { ReactElement } from 'react';
-import type { InfoType } from '../info-bar';
+import type { InfoType } from '../../modules/info';
 
 type RegisterFormValues = {
     username: string,

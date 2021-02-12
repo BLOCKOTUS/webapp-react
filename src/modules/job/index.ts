@@ -1,7 +1,7 @@
 import type { AxiosResponse } from 'axios';
 import { Crypt } from 'hybrid-crypto-js';
 
-import appConfig from '@@Config/app';
+import appConfig from '../../config/app';
 import { request } from '../nerves';
 import { makeInfoProps } from '../info';
 import type { RequestReponseObject } from '../nerves';

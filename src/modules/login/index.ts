@@ -1,6 +1,6 @@
 import type { AxiosResponse } from 'axios';
 
-import appConfig from '@@Config/app';
+import appConfig from '../../config/app';
 import { validateKeypair, generateKeyPair } from '../crypto';
 import { makeInfoProps } from '../info';
 import { request } from '../nerves';
@@ -35,7 +35,7 @@ export const isAlreadyLogged = (
 ): boolean => 
     users
         .users
-        .filter((u: User) => u.username === users.tmp.username)
+        .filter((u: User) => users.tmp && u.username === users.tmp.username)
         .length > 0;
 
 /**
@@ -50,15 +50,14 @@ export const loginUser = (
         setUsers?: (u: UsersType) => void,
     },
 ): void => {
-    const newUsers = [...users.users, {... users.tmp}];
-    users.users = newUsers;
-    users.loggedInUser = `${users.tmp.username}`;
-
-    users.tmp.id = '';
-    users.tmp.wallet = null;
-    users.tmp.keypair = { publicKey: '', privateKey: '' };
-    users.tmp.username = '';
-    if (setUsers) setUsers(users);
+    if (users.tmp) {
+        const newUsers = [...users.users, {...users.tmp}];
+        users.users = newUsers;
+        users.loggedInUser = `${users.tmp ? users.tmp.username : null}`;
+    
+        users.tmp = null;
+        if (setUsers) setUsers(users);
+    }
 };
 
 /**
@@ -79,6 +78,7 @@ export const login = (
     },
 ): void => {
     e.preventDefault();
+    if (!users.tmp) return;
 
     const setInfo = onInfo ? onInfo : () => null;
 
@@ -111,7 +111,8 @@ export const login = (
 export const submitLoginIsDisabled = (
     users: UsersType,
 ): boolean => 
-    users.tmp.username.length === 0
+    !users.tmp
+    || users.tmp.username.length === 0
     || users.tmp.keypair.privateKey.length === 0
     || users.tmp.keypair.publicKey.length === 0
     || users.tmp.wallet === null;
@@ -157,6 +158,7 @@ export const submitRegister = async (
     },
 ): Promise<void> => {
     e.preventDefault();
+    if (!users.tmp) return;
 
     const setInfo = onInfo ? onInfo : () => null;
 

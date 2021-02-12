@@ -12,7 +12,11 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "axios": "^0.21.1",
     "formik": "^2.2.6",
+    "hybrid-crypto-js": "^0.2.4",
+    "lodash": "^4.17.20",
+    "md5": "^2.3.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
@@ -48,6 +52,8 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.168",
+    "@types/md5": "^2.3.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
