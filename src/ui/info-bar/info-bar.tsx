@@ -2,13 +2,17 @@ import styled from 'styled-components';
 
 import type { ReactElement } from 'react';
 
-type InfoBarProps = {
-    type: 'error' | 'info' | '',
+export type InfoType = {
+    type: 'error' | 'info',
     value: string,
     loading: boolean,
+}
+
+type InfoBarProps = {
+    info?: InfoType,
 };
 
-const Wrapper = styled.div<{type?: 'error' | 'info' | ''}>`
+const Wrapper = styled.div<{type?: 'error' | 'info'}>`
     width: 100%;
     margin-bottom: 40px;
     font-size: 30px;
@@ -36,17 +40,17 @@ const Loader = styled.div`
 `;
 
 const InfoBar = ({
-    value,
-    type,
-    loading,
+    info,
 }: InfoBarProps): ReactElement => {
 
-    return (
-        <Wrapper type={type}>
-            { value }
-            { loading && (<Loader />) }
-        </Wrapper>
-    );
+    return info
+        ? (
+            <Wrapper type={info.type}>
+                { info.value }
+                { info.loading && (<Loader />) }
+            </Wrapper>
+        )
+        : (<></>);
         
 };
 

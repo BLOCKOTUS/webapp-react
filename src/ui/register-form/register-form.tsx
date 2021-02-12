@@ -5,6 +5,7 @@ import InfoBar from '../info-bar';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 
 import type { ReactElement } from 'react';
+import type { InfoType } from '../info-bar';
 
 type RegisterFormValues = {
     username: string,
@@ -19,17 +20,11 @@ const onSubmit = (
 }
 
 const RegisterForm = (): ReactElement => {
-    const [infoType, setInfoType] = useState<'error' | 'info' | ''>('');
-    const [infoValue, setInfoValue] = useState('');
-    const [infoLoading, setInfoLoading] = useState(false);
+    const [info, setInfo] = useState<InfoType>();
 
     return (
         <div>
-            <InfoBar 
-                type={infoType}
-                value={infoValue}
-                loading={infoLoading}
-            />
+            <InfoBar info={info} />
             <Formik
                 initialValues={{
                     username: '',
