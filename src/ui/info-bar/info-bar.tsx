@@ -2,11 +2,7 @@ import styled from 'styled-components';
 
 import type { ReactElement } from 'react';
 
-export type InfoType = {
-    type: 'error' | 'info',
-    value: string,
-    loading: boolean,
-}
+import type { InfoType } from '../../modules/info';
 
 type InfoBarProps = {
     info?: InfoType,
