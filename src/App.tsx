@@ -3,19 +3,25 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-} from "react-router-dom";
+} from 'react-router-dom';
+import { Provider } from 'react-redux'
 
+import initializeStore from './store'
 import BackwardButton from './ui/backward-button';
 import LoginForm from './ui/login-form';
 import NavList from './ui/navlist';
 import RegisterForm from './ui/register-form';
 import Kyc from './views/kyc';
 
+
 import type { ReactElement } from 'react';
 
 import './App.css';
 
 export default function App() {
+
+  const store = initializeStore();
+  
   return (
     <Router>
       <div>
