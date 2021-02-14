@@ -13,7 +13,6 @@ import NavList from './ui/navlist';
 import RegisterForm from './ui/register-form';
 import Kyc from './views/kyc';
 
-
 import type { ReactElement } from 'react';
 
 import './App.css';
@@ -21,30 +20,31 @@ import './App.css';
 export default function App() {
 
   const store = initializeStore();
-  
+
   return (
-    <Router>
-      <div>
-        
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/accounts">
-            <Accounts />
-          </Route>
-          <Route path="/kyc">
-            <Kyc />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div>
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/accounts">
+              <Accounts />
+            </Route>
+            <Route path="/kyc">
+              <Kyc />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </Provider>
   );
 ;}
 
