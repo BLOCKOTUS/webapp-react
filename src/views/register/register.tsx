@@ -1,16 +1,27 @@
+import { connect } from 'react-redux';
 import type { ReactElement } from 'react';
 
+import { loginUser } from '../../actions/users';
 import BackwardButton from '../../ui/backward-button';
 import RegisterForm from '../../ui/register-form';
 
-const Register = (): ReactElement => {
-    return (
-      <div>
-        <h2>Register</h2>
-        <RegisterForm />
-        <BackwardButton />
-      </div>
-    );
-  };
+import type { User } from '../../modules/user';
+import type { Dispatch } from '../../store';
 
-export default Register;
+const Register = (): ReactElement => {
+  return (
+    <div>
+      <h2>Register</h2>
+      <RegisterForm />
+      <BackwardButton />
+    </div>
+  );
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    loginUser: (user: User) => dispatch(loginUser(user)),
+  }
+}
+
+export default connect(mapDispatchToProps)(Register);

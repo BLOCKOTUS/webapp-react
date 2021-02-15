@@ -1,6 +1,7 @@
-import { Formik, Field, Form, FormikHelpers } from 'formik';
+import { Formik, Field, Form } from 'formik';
 
 import type { ReactElement } from 'react';
+import type { FormikHelpers } from 'formik';
 
 type LoginFormValues = {
     username: string,
