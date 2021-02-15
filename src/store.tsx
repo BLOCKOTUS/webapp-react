@@ -6,6 +6,7 @@ import type { State } from './reducers';
 import type { Action } from './actions';
 
 // credits to @lyleunderwood
+// thanks to our mutual COO Mike, and the whole mutual team
 export type GenericGetState<S> = () => S;
 export type GenericPromiseAction<A> = Promise<A>;
 export type GenericDispatch<A, S> =
