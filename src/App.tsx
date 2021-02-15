@@ -7,13 +7,11 @@ import {
 import { Provider } from 'react-redux'
 
 import initializeStore from './store'
-import BackwardButton from './ui/backward-button';
-import LoginForm from './ui/login-form';
-import NavList from './ui/navlist';
-import RegisterForm from './ui/register-form';
+import Accounts from './views/accounts';
+import Home from './views/home';
 import Kyc from './views/kyc';
-
-import type { ReactElement } from 'react';
+import Login from './views/login';
+import Register from './views/register';
 
 import './App.css';
 
@@ -47,49 +45,3 @@ export default function App() {
     </Provider>
   );
 ;}
-
-const Home = (): ReactElement => {
-  const navItems = [
-    { label: 'Register', to: '/register' },
-    { label: 'Login', to: '/login' },
-    { label: 'Manage accounts', to: '/accounts' },
-    { label: 'KYC', to: '/kyc' },
-    { label: 'Test DID Url', to: '/' },
-  ];
-  
-  return (
-    <div>
-      <h2>Home</h2>
-      <NavList items={navItems} />
-    </div>
-  );
-};
-
-const Register = (): ReactElement => {
-  return (
-    <div>
-      <h2>Register</h2>
-      <RegisterForm />
-      <BackwardButton />
-    </div>
-  );
-};
-
-const Login = (): ReactElement => {
-  return (
-    <div>
-      <h2>Login</h2>
-      <LoginForm />
-      <BackwardButton />
-    </div>
-  );
-};
-
-const Accounts = (): ReactElement => {
-  return (
-    <div>
-      <h2>Accounts</h2>
-      <BackwardButton />
-    </div>
-  );
-};
