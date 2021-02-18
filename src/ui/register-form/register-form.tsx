@@ -25,7 +25,10 @@ const RegisterForm = ({
         { setSubmitting }: FormikHelpers<RegisterFormValues>,
     ): void => {
         submitRegister({ username: values.username, onInfo: setInfo })
-            .then(user => user && setSubmitting(false) && onSucces(user));
+            .then(user => {
+                setSubmitting(false);
+                user && onSucces(user);
+            });
     }
 
     return (

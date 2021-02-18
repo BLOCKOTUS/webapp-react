@@ -1,13 +1,13 @@
 import type { Action } from '../actions/users';
 import type { UsersType } from '../modules/user';
 
-export type State =  UsersType | null;
+export type State = UsersType | null;
 
 const initialState = {
   tmp: null,
   loggedInUser: null,
   users: [],
-}
+};
 
 const users = (state: State = initialState, action: Action) => {
   switch (action.type) {
