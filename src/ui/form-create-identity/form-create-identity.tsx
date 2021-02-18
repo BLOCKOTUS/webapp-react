@@ -2,7 +2,7 @@ import { Formik, Field, Form, FormikHelpers } from 'formik';
 
 import type { ReactElement } from 'react';
 
-type CreateIdentityFormValues = {
+type FormCreateIdentityValues = {
     firstname: string,
     lastname: string,
     birthdate: string,
@@ -12,14 +12,14 @@ type CreateIdentityFormValues = {
 }
 
 const onSubmit = (
-    values: CreateIdentityFormValues,
-    { setSubmitting }: FormikHelpers<CreateIdentityFormValues>,
+    values: FormCreateIdentityValues,
+    { setSubmitting }: FormikHelpers<FormCreateIdentityValues>,
 ): void => {
     console.log({values});
     setSubmitting(false);
 }
 
-const CreateIdentityForm = (): ReactElement => {
+const FormCreateIdentity = (): ReactElement => {
     return (
         <div>
             <Formik
@@ -59,4 +59,4 @@ const CreateIdentityForm = (): ReactElement => {
     )       
 };
 
-export default CreateIdentityForm;
+export default FormCreateIdentity;

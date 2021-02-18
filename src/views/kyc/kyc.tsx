@@ -3,8 +3,8 @@ import {
   Route,
 } from "react-router-dom";
 
-import BackwardButton from '../../ui/backward-button';
-import CreateIdentityForm from '../../ui/create-identity-form';
+import ButtonBack from '../../ui/button-back';
+import FormCreateIdentity from '../../ui/form-create-identity';
 import NavList from '../../ui/navlist';
 
 import type { ReactElement } from 'react';
@@ -43,7 +43,7 @@ const Init = (): ReactElement => {
     <div>
       <h2>KYC</h2>
       <NavList items={navItems} />
-      <BackwardButton />
+      <ButtonBack />
     </div>
   );
 };
@@ -52,7 +52,7 @@ const Me = (): ReactElement => {
   return (
     <div>
       <h2>Me</h2>
-      <BackwardButton />
+      <ButtonBack />
     </div>
   );
 };
@@ -61,8 +61,8 @@ const Create = (): ReactElement => {
   return (
     <div>
       <h2>Create</h2>
-      <CreateIdentityForm />
-      <BackwardButton />
+      <FormCreateIdentity />
+      <ButtonBack />
     </div>
   );
 };
@@ -71,7 +71,7 @@ const Jobs = (): ReactElement => {
   return (
     <div>
       <h2>Jobs</h2>
-      <BackwardButton />
+      <ButtonBack />
     </div>
   );
 };

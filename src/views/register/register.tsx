@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import type { ReactElement } from 'react';
 
 import * as actions from '../../actions/users';
-import BackwardButton from '../../ui/backward-button';
-import RegisterForm from '../../ui/register-form';
+import ButtonBack from '../../ui/button-back';
+import FormRegister from '../../ui/form-register';
 
 import type { User } from '../../modules/user';
 
@@ -15,8 +15,8 @@ const Register = ({
   return (
     <div>
       <h2>Register</h2>
-      <RegisterForm onSucces={loginUser}/>
-      <BackwardButton />
+      <FormRegister onSucces={loginUser}/>
+      <ButtonBack />
     </div>
   );
 };

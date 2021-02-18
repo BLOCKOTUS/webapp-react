@@ -3,7 +3,7 @@ import { Formik, Field, Form } from 'formik';
 import type { ReactElement } from 'react';
 import type { FormikHelpers } from 'formik';
 
-type LoginFormValues = {
+type FormLoginValues = {
     username: string,
     wallet: string,
     publicKey: string,
@@ -11,14 +11,14 @@ type LoginFormValues = {
 }
 
 const onSubmit = (
-    values: LoginFormValues,
-    { setSubmitting }: FormikHelpers<LoginFormValues>,
+    values: FormLoginValues,
+    { setSubmitting }: FormikHelpers<FormLoginValues>,
 ): void => {
     console.log({values});
     setSubmitting(false);
 }
 
-const LoginForm = (): ReactElement => {
+const FormLogin = (): ReactElement => {
     return (
         <div>
             <Formik
@@ -50,4 +50,4 @@ const LoginForm = (): ReactElement => {
     )       
 };
 
-export default LoginForm;
+export default FormLogin;

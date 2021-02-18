@@ -1,12 +1,12 @@
 import type { ReactElement } from 'react';
 
-import BackwardButton from '../../ui/backward-button';
+import ButtonBack from '../../ui/button-back';
 
 const Accounts = (): ReactElement => {
   return (
     <div>
       <h2>Accounts</h2>
-      <BackwardButton />
+      <ButtonBack />
     </div>
   );
 };

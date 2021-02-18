@@ -1,14 +1,14 @@
 import type { ReactElement } from 'react';
 
-import BackwardButton from '../../ui/backward-button';
-import LoginForm from '../../ui/login-form';
+import ButtonBack from '../../ui/button-back';
+import FormLogin from '../../ui/form-login';
 
 const Login = (): ReactElement => {
     return (
       <div>
         <h2>Login</h2>
-        <LoginForm />
-        <BackwardButton />
+        <FormLogin />
+        <ButtonBack />
       </div>
     );
   };
