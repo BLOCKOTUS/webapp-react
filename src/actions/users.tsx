@@ -1,6 +1,4 @@
 import type { User } from '../modules/user';
-import type { Dispatch, GetState } from '../store';
-
 
 export type UsersLoginUserAction = {
     type: "users/loginUser",

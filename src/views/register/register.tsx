@@ -9,10 +9,11 @@ import type { User } from '../../modules/user';
 import type { Dispatch } from '../../store';
 
 const Register = (): ReactElement => {
+
   return (
     <div>
       <h2>Register</h2>
-      <RegisterForm />
+      <RegisterForm onSucces={loginUser}/>
       <BackwardButton />
     </div>
   );

@@ -35,7 +35,7 @@ export type User = {
  * Users store for managing users locally.
  */
 export type UsersType = {
-    loggedInUser: string;
+    loggedInUser: string | null;
     users: Array<User>;
     tmp: User | null;
 };

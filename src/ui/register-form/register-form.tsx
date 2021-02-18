@@ -1,26 +1,32 @@
 import { useState } from 'react';
 
 import InfoBar from '../info-bar';
+import { submitRegister } from '../../modules/login';
 
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 
 import type { ReactElement } from 'react';
 import type { InfoType } from '../../modules/info';
+import type { User } from '../../modules/user';
 
 type RegisterFormValues = {
     username: string,
 }
 
-const onSubmit = (
-    values: RegisterFormValues,
-    { setSubmitting }: FormikHelpers<RegisterFormValues>,
-): void => {
-    console.log({values});
-    setSubmitting(false);
-}
-
-const RegisterForm = (): ReactElement => {
+const RegisterForm = ({
+    onSucces,
+}: {
+    onSucces: (user:  User) => void
+}): ReactElement => {
     const [info, setInfo] = useState<InfoType>();
+
+    const submitForm = (
+        values: RegisterFormValues,
+        { setSubmitting }: FormikHelpers<RegisterFormValues>,
+    ): void => {
+        submitRegister({ username: values.username, onInfo: setInfo })
+            .then(user => user && setSubmitting(false) && onSucces(user));
+    }
 
     return (
         <div>
@@ -29,7 +35,7 @@ const RegisterForm = (): ReactElement => {
                 initialValues={{
                     username: '',
                 }}
-                onSubmit={onSubmit}
+                onSubmit={submitForm}
             >
                 <Form>
                     <label htmlFor="username">Username</label>

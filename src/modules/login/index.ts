@@ -146,19 +146,22 @@ export const submitRegister = async (
     {
         e,
         users,
+        username,
         onInfo,
         onComplete,
         setUsers,
     }: {
-        e: Event,
-        users: UsersType,
+        e?: Event,
+        users?: UsersType,
+        username?: string,
         onInfo?: (info: InfoType) => void,
         onComplete?: () => void,
         setUsers?: (u: UsersType) => void,
     },
-): Promise<void> => {
-    e.preventDefault();
-    if (!users.tmp) return;
+): Promise<User | false> => {
+    e && e.preventDefault();
+    const _username = username || users?.tmp?.username;
+    if (!_username) { return false; }
 
     const setInfo = onInfo ? onInfo : () => null;
 
@@ -168,23 +171,27 @@ export const submitRegister = async (
     const keypair = await generateKeyPair();
 
     // get wallet from the network
-    const resRegister = await register({ username: users.tmp.username, keypair});
+    const resRegister = await register({ username: _username, keypair });
     if (!resRegister || !resRegister.data.success) {
         setInfo(makeInfoProps({ type: 'error', value: resRegister.data.message || 'error', loading: false }));
-        return;
+        return false;
     }
     const { wallet, id } = resRegister.data;
     setInfo(makeInfoProps({ type: 'info', value: resRegister.data.message, loading: false }));
 
     // login user
     const user = {
-        username: users.tmp.username,
+        username: _username,
         wallet,
         keypair,
         id,
     };
-    users.tmp = user;
-    loginUser({ users, setUsers });
+    if (users) {
+        users.tmp = user; 
+        loginUser({ users, setUsers });
+    }
 
     if (onComplete) onComplete();
+
+    return user;
 };

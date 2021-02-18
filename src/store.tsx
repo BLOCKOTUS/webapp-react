@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import reducer from './reducers';
@@ -19,11 +19,13 @@ export type Dispatch = GenericDispatch<Action, State>;
 export type ThunkAction = GenericThunkAction<Action, State>;
 export type { State, Action };
 
-const initializeStore = (preloadedState?: State) =>
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const initializeStore = (preloadedState?: any) =>
   createStore(
     reducer,
     preloadedState,
-    applyMiddleware(thunk),
+    composeEnhancers(applyMiddleware(thunk)),
   );
 
 export default initializeStore;
