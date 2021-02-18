@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import type { ReactElement } from 'react';
 import { Heart } from 'react-spinners-css';
 
@@ -24,7 +23,6 @@ const Wrapper = styled.div<{type?: 'error' | 'info'}>`
 const InfoBar = ({
     info,
 }: InfoBarProps): ReactElement => {
-    
 
     return info
         ? (

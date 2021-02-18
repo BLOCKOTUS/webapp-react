@@ -1,15 +1,17 @@
 import { connect } from 'react-redux';
 import type { ReactElement } from 'react';
 
-import { loginUser } from '../../actions/users';
+import * as actions from '../../actions/users';
 import BackwardButton from '../../ui/backward-button';
 import RegisterForm from '../../ui/register-form';
 
 import type { User } from '../../modules/user';
-import type { Dispatch } from '../../store';
 
-const Register = (): ReactElement => {
-
+const Register = ({
+  loginUser,
+}: {
+  loginUser: (user: User) => void,
+}): ReactElement => {
   return (
     <div>
       <h2>Register</h2>
@@ -19,10 +21,13 @@ const Register = (): ReactElement => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    loginUser: (user: User) => dispatch(loginUser(user)),
+    loginUser: (user: User) => dispatch(actions.loginUser(user)),
   }
 }
 
-export default connect(mapDispatchToProps)(Register);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(Register);
