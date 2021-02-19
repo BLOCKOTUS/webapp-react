@@ -1,13 +1,13 @@
 import type { ReactElement } from 'react';
 
 import ButtonBack from '../../ui/button-back';
+import View from '../../ui/view';
 
 const Accounts = (): ReactElement => {
   return (
-    <div>
-      <h2>Accounts</h2>
+    <View title="Accounts">
       <ButtonBack />
-    </div>
+    </View>
   );
 };
 

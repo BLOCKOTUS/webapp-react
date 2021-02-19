@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 
 import NavList from '../../ui/navlist';
+import View from '../../ui/view';
 
 const Home = (): ReactElement => {
   const navItems = [
@@ -12,10 +13,9 @@ const Home = (): ReactElement => {
   ];
   
   return (
-    <div>
-      <h2>Home</h2>
+    <View title="Home">
       <NavList items={navItems} />
-    </div>
+    </View>
   );
 };
 

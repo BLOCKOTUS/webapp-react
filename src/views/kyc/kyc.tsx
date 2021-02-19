@@ -6,6 +6,7 @@ import {
 import ButtonBack from '../../ui/button-back';
 import FormCreateIdentity from '../../ui/form-create-identity';
 import NavList from '../../ui/navlist';
+import View from '../../ui/view';
 
 import type { ReactElement } from 'react';
 
@@ -40,39 +41,35 @@ const Init = (): ReactElement => {
   ];
 
   return (
-    <div>
-      <h2>KYC</h2>
+    <View title="KYC">
       <NavList items={navItems} />
       <ButtonBack />
-    </div>
+    </View>
   );
 };
 
 const Me = (): ReactElement => {
   return (
-    <div>
-      <h2>Me</h2>
+    <View title="Me">
       <ButtonBack />
-    </div>
+    </View>
   );
 };
 
 const Create = (): ReactElement => {
   return (
-    <div>
-      <h2>Create</h2>
+    <View title="Create">
       <FormCreateIdentity />
       <ButtonBack />
-    </div>
+    </View>
   );
 };
 
 const Jobs = (): ReactElement => {
   return (
-    <div>
-      <h2>Jobs</h2>
+    <View title="Jobs">
       <ButtonBack />
-    </div>
+    </View>
   );
 };
 
