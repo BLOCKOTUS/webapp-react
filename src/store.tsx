@@ -16,4 +16,7 @@ const initializeStore = (preloadedState?: any) =>
     composeEnhancers(applyMiddleware(thunk)),
   );
 
-export default initializeStore;
+const store = initializeStore();
+
+
+export default store;

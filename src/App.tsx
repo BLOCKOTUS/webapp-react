@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import { Provider } from 'react-redux'
 
-import initializeStore from './store'
+import store from './store'
 import Accounts from './views/accounts';
 import Home from './views/home';
 import Kyc from './views/kyc';
@@ -16,8 +16,6 @@ import Register from './views/register';
 import './App.css';
 
 export default function App() {
-
-  const store = initializeStore();
 
   return (
     <Provider store={store}>

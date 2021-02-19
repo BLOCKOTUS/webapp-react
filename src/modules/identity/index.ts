@@ -215,24 +215,38 @@ export const createIdentity = async (
     const encryptedIdentity = crypt.encrypt(keypairToShare.publicKey, JSON.stringify(citizen));
     
     // post the identity to the nerves
-    const resIdentity = await postIdentity({ user, encryptedIdentity, uniqueHash: uniqueHashFromIdentity(citizen) });
-    if (!resIdentity || !resIdentity.data.success){
-        info = makeInfoProps({ type: 'error', value: resIdentity.data.message, loading: false });
+    try {
+        const resIdentity = await postIdentity({ user, encryptedIdentity, uniqueHash: uniqueHashFromIdentity(citizen) });
+        if (!resIdentity || !resIdentity.data.success){
+            info = makeInfoProps({ type: 'error', value: resIdentity.data.message, loading: false });
+            setInfo(info);
+            return info;
+        }
+        info = makeInfoProps({ type: 'info', value: resIdentity.data.message, loading: true });
+        setInfo(info);
+    } catch (e) {
+        info = makeInfoProps({ type: 'error', value: e.message, loading: false });
         setInfo(info);
         return info;
     }
-    info = makeInfoProps({ type: 'info', value: resIdentity.data.message, loading: true });
-    setInfo(info);
     
     // create verification jobs
-    const resJob = await postJob({ user, encryptedIdentity });
-    if (!resJob || !resJob.data.success) {
-        info = makeInfoProps({ type: 'error', value: resJob.data.message, loading: false });
+    let resJob;
+    try {
+        resJob = await postJob({ user, encryptedIdentity });
+        if (!resJob || !resJob.data.success) {
+            info = makeInfoProps({ type: 'error', value: resJob.data.message, loading: false });
+            setInfo(info);
+            return info;
+        }
+        info = makeInfoProps({ type: 'info', value: resJob.data.message, loading: true });
+        setInfo(info);
+        
+    } catch (e) {
+        info = makeInfoProps({ type: 'error', value: e.message, loading: false });
         setInfo(info);
         return info;
     }
-    info = makeInfoProps({ type: 'info', value: resJob.data.message, loading: true });
-    setInfo(info);
     const { workersIds, jobId } = resJob.data;
 
     // share the keypair with the workers

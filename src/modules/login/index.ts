@@ -171,11 +171,18 @@ export const submitRegister = async (
     const keypair = await generateKeyPair();
 
     // get wallet from the network
-    const resRegister = await register({ username: _username, keypair });
-    if (!resRegister || !resRegister.data.success) {
-        setInfo(makeInfoProps({ type: 'error', value: resRegister.data.message || 'error', loading: false }));
+    let resRegister;
+    try {
+        resRegister = await register({ username: _username, keypair });
+        if (!resRegister || !resRegister.data.success) {
+            setInfo(makeInfoProps({ type: 'error', value: resRegister.data.message || 'error', loading: false }));
+            return false;
+        }
+    } catch (e) {
+        setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
         return false;
     }
+
     const { wallet, id } = resRegister.data;
     setInfo(makeInfoProps({ type: 'info', value: resRegister.data.message, loading: false }));
 

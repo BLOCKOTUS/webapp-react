@@ -19,7 +19,7 @@ const NavList = ({
     return (
         <ul>
             {
-                items.map((i, n) => <li><Link to={i.to} key={n}>{i.label}</Link></li>)
+                items.map((i, n) => <li key={n}><Link to={i.to}>{i.label}</Link></li>)
             }
         </ul>
     );
