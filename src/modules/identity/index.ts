@@ -172,12 +172,16 @@ export const getMyIdentity = async (
             return false;
         }
         const sharedKeypair = decryptKeypair({ user, encryptedKeypair: resEncryptedKeypair.data.keypair });
+        if (!sharedKeypair) {
+            setInfo(makeInfoProps({ type: 'error', value: 'Cannot decrypt keypair.', loading: false }));
+            return false;
+        }
 
         // decrypt and return the identity
         setInfo(makeInfoProps({ type: 'info', value: 'Decrypting ...', loading: true }));
         const decryptedIdentity = decryptIdentity({ keypair: sharedKeypair, identityResponseObject: resIdentity.data.identity });
         if (!decryptedIdentity) {
-            setInfo(makeInfoProps({ type: 'error', value: 'Cannot decrypt identity.' || 'error', loading: false }));
+            setInfo(makeInfoProps({ type: 'error', value: 'Cannot decrypt identity.', loading: false }));
             return false;
         }
 

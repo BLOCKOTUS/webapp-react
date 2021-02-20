@@ -1,10 +1,10 @@
 import type { User } from '../modules/user';
 
 export type UsersLoginUserAction = {
-    type: "users/loginUser",
-    payload: {
-      user: User,
-    },
+  type: "users/loginUser",
+  payload: {
+    user: User,
+  },
 };
 
 export const loginUser = (user: User): UsersLoginUserAction => ({
@@ -14,4 +14,19 @@ export const loginUser = (user: User): UsersLoginUserAction => ({
   },
 });
 
-export type Action = UsersLoginUserAction;
+export type UsersSelectLoggedUserAction = {
+  type: "users/selectLoggedUser",
+  payload: {
+    username: string,
+  },
+};
+
+export const selectLoggedUser = (username: string): UsersSelectLoggedUserAction => ({
+  type: "users/selectLoggedUser",
+  payload: {
+    username,
+  },
+});
+
+export type Action = UsersLoginUserAction
+  | UsersSelectLoggedUserAction;

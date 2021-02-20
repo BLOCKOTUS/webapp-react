@@ -11,17 +11,31 @@ const initialState = {
 
 const users = (state: State = initialState, action: Action) => {
   switch (action.type) {
+    case 'users/selectLoggedUser':
+      if (state && action.payload.username) {
+        return {
+          ...state,
+          loggedInUser: action.payload.username,
+        };
+      }
+      return state;
+
     case 'users/loginUser':
       if (state && action.payload.user) {
         if (state.users.findIndex(u => u.id === action.payload.user.id) < 0) {
           return {
             ...state,
+            loggedInUser: action.payload.user.username,
             users: [
               ...state.users,
               action.payload.user,
             ],
           }
         }
+        return {
+          ...state,
+          loggedInUser: action.payload.user.username,
+        };
       }
       return state;
 
