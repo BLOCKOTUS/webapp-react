@@ -151,6 +151,7 @@ export const getMyIdentity = async (
         const resIdentity = await getIdentity({ user });
         if (!resIdentity || !resIdentity.data.success){
             setInfo(makeInfoProps({ type: 'error', value: resIdentity.data.message || 'error', loading: false }));
+            return false;
         }
 
         // get job list containing the jobId used for identity verification
@@ -158,6 +159,7 @@ export const getMyIdentity = async (
         const resJobList = await getJobList({ user, chaincode: 'identity', key: user.id });
         if (!resJobList || !resJobList.data.success){
             setInfo(makeInfoProps({ type: 'error', value: resJobList.data.message || 'error', loading: false }));
+            return false;
         }
         const jobId = resJobList.data.list[0].jobId;
 
@@ -167,18 +169,25 @@ export const getMyIdentity = async (
         const resEncryptedKeypair = await getEncryptedKeypair({ keypairId, user });
         if (!resEncryptedKeypair || !resEncryptedKeypair.data.success){
             setInfo(makeInfoProps({ type: 'error', value: resEncryptedKeypair.data.message || 'error', loading: false }));
+            return false;
         }
         const sharedKeypair = decryptKeypair({ user, encryptedKeypair: resEncryptedKeypair.data.keypair });
 
         // decrypt and return the identity
         setInfo(makeInfoProps({ type: 'info', value: 'Decrypting ...', loading: true }));
         const decryptedIdentity = decryptIdentity({ keypair: sharedKeypair, identityResponseObject: resIdentity.data.identity });
+        if (!decryptedIdentity) {
+            setInfo(makeInfoProps({ type: 'error', value: 'Cannot decrypt identity.' || 'error', loading: false }));
+            return false;
+        }
+
+        // return Identity
+        setInfo(makeInfoProps({ type: 'info', value: '', loading: false }));
         const identityWithKyc: IdentityTypeWithKYC = { 
             ...decryptedIdentity,
             kyc: resIdentity.data.identity.kyc,
             confirmations: resIdentity.data.identity.confirmations,
         };
-        setInfo(makeInfoProps({ type: 'info', value: '', loading: false }));
         return identityWithKyc;
     } catch (e) {
         setInfo(makeInfoProps({ type: 'error', value: e.message, loading: false }));
@@ -199,7 +208,7 @@ export const createIdentity = async (
         user: User,
         onInfo?: (info: InfoType) => void,
     },
-): Promise<InfoType> => {
+): Promise<boolean> => {
     const setInfo = onInfo ? onInfo : () => null;
 
     let info = makeInfoProps({ type: 'info', value: 'Submitting...', loading: true });
@@ -209,7 +218,7 @@ export const createIdentity = async (
     if (!validateDocumentationUrl(citizen.documentation)) {
         info = makeInfoProps({ type: 'error', value: 'Documentation URL is incorrect. Format: https://imgur.com/a/5a15vOr', loading: false });
         setInfo(info);
-        return info;
+        return true;
     }
 
     // create keypair (to be shared later)
@@ -224,7 +233,7 @@ export const createIdentity = async (
         if (!resIdentity || !resIdentity.data.success){
             info = makeInfoProps({ type: 'error', value: resIdentity.data.message, loading: false });
             setInfo(info);
-            return info;
+            return false;
         }
         info = makeInfoProps({ type: 'info', value: resIdentity.data.message, loading: true });
         setInfo(info);
@@ -234,7 +243,7 @@ export const createIdentity = async (
         if (!resJob || !resJob.data.success) {
             info = makeInfoProps({ type: 'error', value: resJob.data.message, loading: false });
             setInfo(info);
-            return info;
+            return false;
         }
         info = makeInfoProps({ type: 'info', value: resJob.data.message, loading: true });
         setInfo(info);
@@ -246,7 +255,7 @@ export const createIdentity = async (
         if (!resKeypair || !resKeypair.data.success) {
             info = makeInfoProps({ type: 'error', value: resKeypair.data.message, loading: false });
             setInfo(info);
-            return info;
+            return false;
         }
         info = makeInfoProps({ 
             type: 'info', 
@@ -254,13 +263,12 @@ export const createIdentity = async (
             loading: false,
         });
         setInfo(info);
+        return true;
     } catch (e) {
         info = makeInfoProps({ type: 'error', value: e.message, loading: false });
         setInfo(info);
+        return false;
     }
-    
-    return info;
-    
 };
 
 /**
@@ -276,51 +284,61 @@ export const getIdentityVerificationJob = async (
         user: User,
         onInfo?: (info: InfoType) => void,
     },
-): Promise<[IdentityTypeWithKYC, IdentityTypeWithKYC] | null> => {
+): Promise<[IdentityTypeWithKYC, IdentityTypeWithKYC] | false> => {
     const setInfo = onInfo ? onInfo : () => null;
 
-    // get job
-    const resJob = await getJob({ user, jobId });
-    if( !resJob || !resJob.data.success) {
-      setInfo(makeInfoProps({ type: 'error', value: resJob.data.message || 'error', loading: false }));
-      return null;
-    }
-    setInfo(makeInfoProps({ type: 'info', value: resJob.data.message, loading: true }));
-    const job = resJob.data.job;
+    try {
+        // get job
+        const resJob = await getJob({ user, jobId });
+        if( !resJob || !resJob.data.success) {
+          setInfo(makeInfoProps({ type: 'error', value: resJob.data.message || 'error', loading: false }));
+          return false;
+        }
+        setInfo(makeInfoProps({ type: 'info', value: resJob.data.message, loading: true }));
+        const job = resJob.data.job;
+    
+        // get shared keypair to decrypt the job
+        const keypairId = `job||${job.creator}||${jobId}`;
+        const resEncryptedKeypair = await getEncryptedKeypair({ keypairId, user });
+        if( !resEncryptedKeypair || !resEncryptedKeypair.data.success) {
+            setInfo(makeInfoProps({ type: 'error', value: resEncryptedKeypair.data.message || 'error', loading: false }));
+            return false;
+        }
+        setInfo(makeInfoProps({ type: 'info', value: resEncryptedKeypair.data.message, loading: true }));
+        const sharedKeypair = decryptKeypair({ user, encryptedKeypair: resEncryptedKeypair.data.keypair });
+        const decryptedJob = decryptJob({ keypair: sharedKeypair, encryptedJob: job.data });
+    
+        // get job creator identity
+        const resCreatorIdentity = await getIdentity({ user, id: job.creator });
+        if( !resCreatorIdentity || !resCreatorIdentity.data.success) {
+            setInfo(makeInfoProps({ type: 'error', value: resCreatorIdentity.data.message || 'error', loading: false }));
+            return false;
+        }
+        setInfo(makeInfoProps({ type: 'info', value: '', loading: false}));
 
-    // get shared keypair to decrypt the job
-    const keypairId = `job||${job.creator}||${jobId}`;
-    const resEncryptedKeypair = await getEncryptedKeypair({ keypairId, user });
-    if( !resEncryptedKeypair || !resEncryptedKeypair.data.success) {
-        setInfo(makeInfoProps({ type: 'error', value: resEncryptedKeypair.data.message || 'error', loading: false }));
-        return null;
-    }
-    setInfo(makeInfoProps({ type: 'info', value: resEncryptedKeypair.data.message, loading: true }));
-    const sharedKeypair = decryptKeypair({ user, encryptedKeypair: resEncryptedKeypair.data.keypair });
-    const decryptedJob = decryptJob({ keypair: sharedKeypair, encryptedJob: job.data });
+        const creatorIdentity = decryptIdentity({ keypair: sharedKeypair, identityResponseObject: resCreatorIdentity.data.identity });
+        if( !creatorIdentity) {
+            setInfo(makeInfoProps({ type: 'error', value: 'Cannot decrypt identity.' || 'error', loading: false }));
+            return false;
+        }
 
-    // get job creator identity
-    const resCreatorIdentity = await getIdentity({ user, id: job.creator });
-    if( !resCreatorIdentity || !resCreatorIdentity.data.success) {
-        setInfo(makeInfoProps({ type: 'error', value: resCreatorIdentity.data.message || 'error', loading: false }));
-        return null;
+        return [
+            {
+                ...decryptedJob,
+                uniqueHash: uniqueHashFromIdentity(decryptedJob),
+                confirmations: resCreatorIdentity.data.identity.confirmations,
+                kyc: resCreatorIdentity.data.identity.kyc,
+            },
+            {
+                ...creatorIdentity,
+                confirmations: resCreatorIdentity.data.identity.confirmations,
+                kyc: resCreatorIdentity.data.identity.kyc,
+            },
+        ];
+    } catch (e) {
+        setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
+        return false;
     }
-    setInfo(makeInfoProps({ type: 'info', value: '', loading: false}));
-    const creatorIdentity = decryptIdentity({ keypair: sharedKeypair, identityResponseObject: resCreatorIdentity.data.identity });
-
-    return [
-        {
-            ...decryptedJob,
-            uniqueHash: uniqueHashFromIdentity(decryptedJob),
-            confirmations: resCreatorIdentity.data.identity.confirmations,
-            kyc: resCreatorIdentity.data.identity.kyc,
-        },
-        {
-            ...creatorIdentity,
-            confirmations: resCreatorIdentity.data.identity.confirmations,
-            kyc: resCreatorIdentity.data.identity.kyc,
-        },
-    ];
 };
 
 /**
@@ -334,10 +352,14 @@ export const decryptIdentity = (
         keypair: Keypair,
         identityResponseObject: IdentityResponseObject,
     },
-): IdentityType => {
+): IdentityType | false => {
     const crypt = new Crypt();
-    const rawIdentity = crypt.decrypt(keypair.privateKey, identityResponseObject.encryptedIdentity);
-    return { ...JSON.parse(rawIdentity.message), uniqueHash: identityResponseObject.uniqueHash };
+    try {
+        const rawIdentity = crypt.decrypt(keypair.privateKey, identityResponseObject.encryptedIdentity);
+        return { ...JSON.parse(rawIdentity.message), uniqueHash: identityResponseObject.uniqueHash };
+    } catch (e) {
+        return false;
+    }
 };
 
 /**
@@ -373,17 +395,22 @@ export const submitCreateIdentity = async (
         onComplete?: () => void,
         setUsers?: (u: UsersType) => void,
     },
-): Promise<void> => {
+): Promise<boolean> => {
     e.preventDefault();
-    const info = await createIdentity({ citizen, user, onInfo });
-    if (info.type === 'info') {
-        let loggedInUser = users.users.filter(u => u.username === users.loggedInUser)[0];
-        const loggedIndex = users.users.indexOf(loggedInUser);
-        loggedInUser = { ...loggedInUser, identity: {...citizen} };
-        users.users[loggedIndex] = loggedInUser;
+    try {
+        const success = await createIdentity({ citizen, user, onInfo });
+        if (success) {
+            let loggedInUser = users.users.filter(u => u.username === users.loggedInUser)[0];
+            const loggedIndex = users.users.indexOf(loggedInUser);
+            loggedInUser = { ...loggedInUser, identity: {...citizen} };
+            users.users[loggedIndex] = loggedInUser;
 
-        if (setUsers) setUsers(users);
-        if (onComplete) onComplete();
+            if (setUsers) setUsers(users);
+            if (onComplete) onComplete();
+        }
+        return success;
+    } catch (e) {
+        return false;
     }
 };
 
