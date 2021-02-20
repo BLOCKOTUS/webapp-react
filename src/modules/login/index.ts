@@ -64,7 +64,7 @@ export const loginUser = (
  * Used for the onClick event of the `login` button on Login page.
  * It validates the inputted keypair and perform the login action.
  */
-export const login = (
+export const login = async (
     {
         e,
         users,
@@ -76,9 +76,9 @@ export const login = (
         onInfo?: (info: InfoType | null) => void,
         setUsers?: (u: UsersType) => void,
     },
-): void => {
+): Promise<boolean> => {
     e.preventDefault();
-    if (!users.tmp) return;
+    if (!users.tmp) return false;
 
     const setInfo = onInfo ? onInfo : () => null;
 
@@ -86,23 +86,24 @@ export const login = (
     setInfo(makeInfoProps({ type: 'info', value: '', loading: true }));
 
     // validate keypair
-    validateKeypair(users.tmp.keypair)
-        .catch(_e => {
-            setInfo(makeInfoProps({ type: 'error', value: 'Keypair is invalid', loading: false }));
-            return;
-        });
+    try {
+        await validateKeypair(users.tmp.keypair);
+    } catch (e) {
+        setInfo(makeInfoProps({ type: 'error', value: 'Keypair is invalid', loading: false }));
+        return false;
+    }
 
     // verify if already logged in
     if (isAlreadyLogged(users)) {
         setInfo(makeInfoProps({ type: 'error', value: `${users.tmp.username} already logged in.`, loading: false }));
-        return;
+        return false;
     }
     
     // perform login action
     loginUser({ users, setUsers });
 
     setInfo(makeInfoProps({ type: 'info', value: 'Successfully registered.', loading: false}));
-    return;
+    return true;
 };
 
 /**
@@ -167,38 +168,39 @@ export const submitRegister = async (
 
     setInfo(makeInfoProps({ type: 'info', value: '', loading: true }));
 
-    // generate keypair
-    const keypair = await generateKeyPair();
-
-    // get wallet from the network
-    let resRegister;
     try {
-        resRegister = await register({ username: _username, keypair });
+        // generate keypair
+        const keypair = await generateKeyPair();
+
+        // get wallet from the network
+        const resRegister = await register({ username: _username, keypair });
         if (!resRegister || !resRegister.data.success) {
             setInfo(makeInfoProps({ type: 'error', value: resRegister.data.message || 'error', loading: false }));
             return false;
         }
+
+        const { wallet, id } = resRegister.data;
+        setInfo(makeInfoProps({ type: 'info', value: resRegister.data.message, loading: false }));
+    
+        // make user object
+        const user = {
+            username: _username,
+            wallet,
+            keypair,
+            id,
+        };
+    
+        if (users) {
+            // login user with Svelte store method 
+            users.tmp = user; 
+            loginUser({ users, setUsers });
+        }
+    
+        if (onComplete) onComplete();
+    
+        return user;
     } catch (e) {
         setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
         return false;
     }
-
-    const { wallet, id } = resRegister.data;
-    setInfo(makeInfoProps({ type: 'info', value: resRegister.data.message, loading: false }));
-
-    // login user
-    const user = {
-        username: _username,
-        wallet,
-        keypair,
-        id,
-    };
-    if (users) {
-        users.tmp = user; 
-        loginUser({ users, setUsers });
-    }
-
-    if (onComplete) onComplete();
-
-    return user;
 };
