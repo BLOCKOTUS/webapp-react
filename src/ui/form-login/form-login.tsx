@@ -1,12 +1,16 @@
 import { Formik, Field, Form } from 'formik';
 import { connect } from 'react-redux';
+import { useState } from 'react';
 
 import type { ReactElement } from 'react';
 import type { FormikHelpers } from 'formik';
 
+import InfoBar from '../info-bar';
 import * as actions from '../../actions/users';
 import { login } from '../../modules/login';
+
 import type { User } from '../../modules/user';
+import type { InfoType } from '../../modules/info';
 
 type FormLoginValues = {
     username: string,
@@ -20,27 +24,39 @@ const FormLogin = ({
 }: {
     loginUser: (user: User) => void,
 }): ReactElement => {
+    const [info, setInfo] = useState<InfoType | null>();
 
     const onSubmit = (
         values: FormLoginValues,
         { setSubmitting }: FormikHelpers<FormLoginValues>,
     ): void => {
-        login(values).then(success => {
-            setSubmitting(false);
-            let user: User = {
-                username: values.username,
-                wallet: JSON.parse(values.wallet),
-                keypair: {
-                    privateKey: values.privateKey,
-                    publicKey: values.publicKey,
-                },
-            };
-            if (success) { loginUser(user); }
-        });
+        login({ ...values, onInfo: setInfo })
+            .then(success => {
+                setSubmitting(false);
+                if (success) { 
+                    try {
+                        let user: User = {
+                            username: values.username,
+                            wallet: JSON.parse(values.wallet),
+                            keypair: {
+                                privateKey: values.privateKey,
+                                publicKey: values.publicKey,
+                            },
+                        };
+                        loginUser(user); 
+                    } catch (e) {
+
+                    }
+                }
+            })
+            .catch(e => {
+                setSubmitting(false);
+            });
     }
 
     return (
         <div>
+            <InfoBar info={info} />
             <Formik
                 initialValues={{
                     username: '',

@@ -1,9 +1,8 @@
 import { useState } from 'react';
+import { Formik, Field, Form, FormikHelpers } from 'formik';
 
 import InfoBar from '../info-bar';
 import { submitRegister } from '../../modules/login';
-
-import { Formik, Field, Form, FormikHelpers } from 'formik';
 
 import type { ReactElement } from 'react';
 import type { InfoType } from '../../modules/info';
