@@ -306,6 +306,10 @@ export const getIdentityVerificationJob = async (
         }
         setInfo(makeInfoProps({ type: 'info', value: resEncryptedKeypair.data.message, loading: true }));
         const sharedKeypair = decryptKeypair({ user, encryptedKeypair: resEncryptedKeypair.data.keypair });
+        if (!sharedKeypair) {
+            setInfo(makeInfoProps({ type: 'error', value: 'Cannot decrypt keypair.', loading: false }));
+            return false;
+        }
         const decryptedJob = decryptJob({ keypair: sharedKeypair, encryptedJob: job.data });
     
         // get job creator identity

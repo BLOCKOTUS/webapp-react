@@ -92,8 +92,10 @@ const makeSharedWithObjectForWorkers = (
 /**
  * Return the logged in user, from the `users` store.
  */
-export const getLoggedInUser = (users: UsersType): User => 
-    users.users.filter(u => u.username === users.loggedInUser)[0];
+export const getLoggedInUser = (users: UsersType): User | false => {
+    let loggedIn = users.users.filter(u => u.username === users.loggedInUser);
+    return loggedIn[0] ? loggedIn[0] : false;
+}
 
 /**
  * Request an encrypted keypair from the network.
@@ -162,7 +164,11 @@ export const decryptKeypair = (
         user: User,
         encryptedKeypair: Encrypted,
     },
-): Keypair => {
-    const rawSharedKeypair = crypt.decrypt(user.keypair.privateKey, encryptedKeypair);
-    return JSON.parse(rawSharedKeypair.message);
+): Keypair | false => {
+    try {
+        const rawSharedKeypair = crypt.decrypt(user.keypair.privateKey, encryptedKeypair);
+        return JSON.parse(rawSharedKeypair.message);
+    } catch (e) {
+        return false;
+    }
 };
