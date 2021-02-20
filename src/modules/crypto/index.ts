@@ -52,9 +52,13 @@ export const validateKeypair = async (keypair: Keypair): Promise<boolean> => {
             return;
         }
         const message = 'testme';
-        const encrypted = crypt.encrypt(keypair.publicKey, message);
-        const decrypted = crypt.decrypt(keypair.privateKey, encrypted);
-        decrypted.message === message ? resolve(true) : reject(false);
+        try {
+            const encrypted = crypt.encrypt(keypair.publicKey, message);
+            const decrypted = crypt.decrypt(keypair.privateKey, encrypted);
+            decrypted.message === message ? resolve(true) : reject(false);
+        } catch (e) {
+            reject(false);
+        }
         return;
     });
 };
