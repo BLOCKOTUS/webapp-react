@@ -153,19 +153,25 @@ export const onClickApproveRefuse = async (
         onInfo?: (info: InfoType | null) => void,
         onComplete?: () => void,
     },
-): Promise<void> => {
+): Promise<boolean> => {
     const setInfo = onInfo ? onInfo : () => null;
 
     setInfo(makeInfoProps({ type: 'info', value: 'Submitting result...', loading: true }));
 
-    const resComplete = await completeJob({ user, jobId, result });
-    if(!resComplete || !resComplete.data.success){
-        setInfo(makeInfoProps({ type: 'error', value: resComplete.data.message || 'error', loading: false }));
-        return;
+    try {
+        const resComplete = await completeJob({ user, jobId, result });
+        if(!resComplete || !resComplete.data.success){
+            setInfo(makeInfoProps({ type: 'error', value: resComplete.data.message || 'error', loading: false }));
+            return false;
+        }
+    
+        setInfo(makeInfoProps({ type: 'info', value: 'Job complete. You will be redirected to the job list.', loading: true }));
+        if (onComplete) onComplete();
+        return true;
+    } catch (e) {
+        setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
+        return false;
     }
-
-    setInfo(makeInfoProps({ type: 'info', value: 'Job complete. You will be redirected to the job list.', loading: true }));
-    if (onComplete) onComplete();
 };
 
 /**
@@ -179,10 +185,14 @@ export const decryptJob = (
         keypair: Keypair,
         encryptedJob: Encrypted,
     },
-): any => {
+): object | false => {
     const crypt = new Crypt();
-    const rawEncryptedJob = crypt.decrypt(keypair.privateKey, encryptedJob);
-    return JSON.parse(rawEncryptedJob.message);
+    try {
+        const rawEncryptedJob = crypt.decrypt(keypair.privateKey, encryptedJob);
+        return JSON.parse(rawEncryptedJob.message);
+    } catch (e) {
+        return false;
+    }
 };
 
 /**
