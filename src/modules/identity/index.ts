@@ -211,62 +211,54 @@ export const createIdentity = async (
 ): Promise<boolean> => {
     const setInfo = onInfo ? onInfo : () => null;
 
-    let info = makeInfoProps({ type: 'info', value: 'Submitting...', loading: true });
-    setInfo(info);
+    setInfo(makeInfoProps({ type: 'info', value: 'Submitting...', loading: true }));
 
-    // validate documentation url
-    if (!validateDocumentationUrl(citizen.documentation)) {
-        info = makeInfoProps({ type: 'error', value: 'Documentation URL is incorrect. Format: https://imgur.com/a/5a15vOr', loading: false });
-        setInfo(info);
-        return true;
-    }
-
-    // create keypair (to be shared later)
-    const keypairToShare = await generateKeyPair();
-
-    // encrypt the identity with the publicKey
-    const encryptedIdentity = crypt.encrypt(keypairToShare.publicKey, JSON.stringify(citizen));
-    
     try {
+        // validate documentation url
+        if (!validateDocumentationUrl(citizen.documentation)) {
+            setInfo(makeInfoProps({ type: 'error', value: 'Documentation URL is incorrect. Format: https://imgur.com/a/5a15vOr', loading: false }));
+            return true;
+        }
+
+        // create keypair (to be shared later)
+        const keypairToShare = await generateKeyPair();
+    
+        // encrypt the identity with the publicKey
+        const encryptedIdentity = crypt.encrypt(keypairToShare.publicKey, JSON.stringify(citizen));
+
         // post the identity to the nerves
         const resIdentity = await postIdentity({ user, encryptedIdentity, uniqueHash: uniqueHashFromIdentity(citizen) });
         if (!resIdentity || !resIdentity.data.success){
-            info = makeInfoProps({ type: 'error', value: resIdentity.data.message, loading: false });
-            setInfo(info);
+            setInfo(makeInfoProps({ type: 'error', value: resIdentity.data.message, loading: false }));
             return false;
         }
-        info = makeInfoProps({ type: 'info', value: resIdentity.data.message, loading: true });
-        setInfo(info);
+        setInfo(makeInfoProps({ type: 'info', value: resIdentity.data.message, loading: true }));
 
         // create verification jobs
         const resJob = await postJob({ user, encryptedIdentity });
         if (!resJob || !resJob.data.success) {
-            info = makeInfoProps({ type: 'error', value: resJob.data.message, loading: false });
-            setInfo(info);
+            setInfo(makeInfoProps({ type: 'error', value: resJob.data.message, loading: false }));
             return false;
         }
-        info = makeInfoProps({ type: 'info', value: resJob.data.message, loading: true });
-        setInfo(info);
+        setInfo(makeInfoProps({ type: 'info', value: resJob.data.message, loading: true }));
         const { workersIds, jobId } = resJob.data;
 
         // share the keypair with the workers
         const myEncryptedKeyPair = JSON.stringify(crypt.encrypt(user.keypair.publicKey, JSON.stringify(keypairToShare)));
         const resKeypair = await postEncryptedKeypair({ workersIds, keypairToShare, jobId, myEncryptedKeyPair, user });
         if (!resKeypair || !resKeypair.data.success) {
-            info = makeInfoProps({ type: 'error', value: resKeypair.data.message, loading: false });
-            setInfo(info);
+            setInfo(makeInfoProps({ type: 'error', value: resKeypair.data.message, loading: false }));
             return false;
         }
-        info = makeInfoProps({ 
+
+        setInfo(makeInfoProps({ 
             type: 'info', 
             value: 'Your identity have been successfully created. Wait for confirmations. You will be redirected.', 
             loading: false,
-        });
-        setInfo(info);
+        }));
         return true;
     } catch (e) {
-        info = makeInfoProps({ type: 'error', value: e.message, loading: false });
-        setInfo(info);
+        setInfo(makeInfoProps({ type: 'error', value: e.message, loading: false }));
         return false;
     }
 };
