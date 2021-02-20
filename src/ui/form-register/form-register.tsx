@@ -18,7 +18,7 @@ const RegisterForm = ({
 }: {
     onSucces: (user:  User) => void
 }): ReactElement => {
-    const [info, setInfo] = useState<InfoType>();
+    const [info, setInfo] = useState<InfoType | null>();
 
     const submitForm = (
         values: RegisterFormValues,

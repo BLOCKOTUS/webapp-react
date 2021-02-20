@@ -185,7 +185,7 @@ export const decryptJob = (
         keypair: Keypair,
         encryptedJob: Encrypted,
     },
-): object | false => {
+): any | false => {
     const crypt = new Crypt();
     try {
         const rawEncryptedJob = crypt.decrypt(keypair.privateKey, encryptedJob);
