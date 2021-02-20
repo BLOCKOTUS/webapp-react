@@ -17,7 +17,7 @@ type FormLoginValues = {
     wallet: string,
     publicKey: string,
     privateKey: string,
-}
+};
 
 const FormLogin = ({
     loginUser,
@@ -90,9 +90,9 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
       loginUser: (user: User) => dispatch(actions.loginUser(user)),
     }
-  }
+};
 
 export default connect(
     null,
     mapDispatchToProps,
-  )(FormLogin);
+)(FormLogin);

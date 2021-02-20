@@ -5,8 +5,9 @@ import {
   Route,
 } from 'react-router-dom';
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
-import store from './store'
+import { store, persistor } from './store'
 import Accounts from './views/accounts';
 import Home from './views/home';
 import Kyc from './views/kyc';
@@ -19,27 +20,29 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <Router>
-        <div>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/register">
-              <Register />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/accounts">
-              <Accounts />
-            </Route>
-            <Route path="/kyc">
-              <Kyc />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <div>
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/register">
+                <Register />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/accounts">
+                <Accounts />
+              </Route>
+              <Route path="/kyc">
+                <Kyc />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </PersistGate>
     </Provider>
   );
 ;}

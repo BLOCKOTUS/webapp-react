@@ -1,5 +1,5 @@
 # BLOCKOTUS Webapp
-## Boilerplate React.js + TypeScript + EsLint + Router + Redux
+## Boilerplate React.js + TypeScript + EsLint + Router + Redux Persist
 
 ![preview](https://github.com/BLOCKOTUS/webapp/blob/master/README_img.png)
 

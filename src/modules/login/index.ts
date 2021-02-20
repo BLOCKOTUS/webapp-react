@@ -90,12 +90,15 @@ export const login = async (
     },
 ): Promise<boolean> => {
     if (e) { e.preventDefault(); }
+
+    const setInfo = onInfo ? onInfo : () => null;
     
     if ((!users || !users.tmp) && (
         !username || !wallet || !privateKey || !publicKey
-    )) { return false; }
-
-    const setInfo = onInfo ? onInfo : () => null;
+    )) { 
+        setInfo(makeInfoProps({ type: 'error', value: 'Data is incomplete.', loading: false }));
+        return false; 
+    }
 
     // set info loading
     setInfo(makeInfoProps({ type: 'info', value: '', loading: true }));
@@ -111,7 +114,7 @@ export const login = async (
             await validateKeypair(users.tmp.keypair);
         }
     } catch (e) {
-        setInfo(makeInfoProps({ type: 'error', value: 'Keypair is invalid', loading: false }));
+        setInfo(makeInfoProps({ type: 'error', value: 'Keypair is invalid.', loading: false }));
         return false;
     }
 

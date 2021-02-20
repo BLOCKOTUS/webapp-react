@@ -2,7 +2,9 @@ import { connect } from 'react-redux';
 import type { ChangeEvent, ReactElement } from 'react';
 
 import * as actions from '../../actions/users';
-import store from '../../store';
+import { store  } from '../../store';
+
+import type { User } from '../../modules/user';
 
 const SelectLoggedUser = ({
     selectLoggedUser,
@@ -17,7 +19,7 @@ const SelectLoggedUser = ({
     return (
         <div>
             <select onChange={onChange}>
-                { state.users?.users.map(u => {
+                { state.users?.users.map((u: User) => {
                     return (
                         <option 
                             key={u.username} 
