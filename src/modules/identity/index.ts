@@ -141,7 +141,7 @@ export const getMyIdentity = async (
         onInfo,
     }: {
         user: User,
-        onInfo?: (info: InfoType) => void,
+        onInfo?: (info: InfoType | null) => void,
     },
 ): Promise<IdentityTypeWithKYC | false> => {
     const setInfo = onInfo ? onInfo : () => null;
@@ -182,7 +182,7 @@ export const getMyIdentity = async (
         }
 
         // return Identity
-        setInfo(makeInfoProps({ type: 'info', value: '', loading: false }));
+        setInfo(null);
         const identityWithKyc: IdentityTypeWithKYC = { 
             ...decryptedIdentity,
             kyc: resIdentity.data.identity.kyc,
@@ -206,7 +206,7 @@ export const createIdentity = async (
     }: {
         citizen: IdentityType, 
         user: User,
-        onInfo?: (info: InfoType) => void,
+        onInfo?: (info: InfoType | null) => void,
     },
 ): Promise<boolean> => {
     const setInfo = onInfo ? onInfo : () => null;
@@ -282,7 +282,7 @@ export const getIdentityVerificationJob = async (
     }: {
         jobId: string,
         user: User,
-        onInfo?: (info: InfoType) => void,
+        onInfo?: (info: InfoType | null) => void,
     },
 ): Promise<[IdentityTypeWithKYC, IdentityTypeWithKYC] | false> => {
     const setInfo = onInfo ? onInfo : () => null;
@@ -314,7 +314,7 @@ export const getIdentityVerificationJob = async (
             setInfo(makeInfoProps({ type: 'error', value: resCreatorIdentity.data.message || 'error', loading: false }));
             return false;
         }
-        setInfo(makeInfoProps({ type: 'info', value: '', loading: false}));
+        setInfo(null);
 
         const creatorIdentity = decryptIdentity({ keypair: sharedKeypair, identityResponseObject: resCreatorIdentity.data.identity });
         if( !creatorIdentity) {
@@ -391,7 +391,7 @@ export const submitCreateIdentity = async (
         user: User,
         users: UsersType,
         citizen: IdentityType,
-        onInfo?: (info: InfoType) => void,
+        onInfo?: (info: InfoType | null) => void,
         onComplete?: () => void,
         setUsers?: (u: UsersType) => void,
     },

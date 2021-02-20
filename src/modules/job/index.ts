@@ -150,7 +150,7 @@ export const onClickApproveRefuse = async (
         jobId: string,
         result: 0 | 1,
         user: User,
-        onInfo?: (info: InfoType) => void,
+        onInfo?: (info: InfoType | null) => void,
         onComplete?: () => void,
     },
 ): Promise<void> => {

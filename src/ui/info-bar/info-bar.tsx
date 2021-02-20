@@ -5,7 +5,7 @@ import { Heart } from 'react-spinners-css';
 import type { InfoType } from '../../modules/info';
 
 type InfoBarProps = {
-    info?: InfoType,
+    info?: InfoType | null,
 };
 
 const Wrapper = styled.div<{type?: 'error' | 'info'}>`

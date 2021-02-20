@@ -73,7 +73,7 @@ export const login = (
     }: {
         e: Event,
         users: UsersType,
-        onInfo?: (info: InfoType) => void,
+        onInfo?: (info: InfoType | null) => void,
         setUsers?: (u: UsersType) => void,
     },
 ): void => {
@@ -154,7 +154,7 @@ export const submitRegister = async (
         e?: Event,
         users?: UsersType,
         username?: string,
-        onInfo?: (info: InfoType) => void,
+        onInfo?: (info: InfoType | null) => void,
         onComplete?: () => void,
         setUsers?: (u: UsersType) => void,
     },
