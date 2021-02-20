@@ -51,7 +51,11 @@ export const loginUser = (
     },
 ): void => {
     if (users.tmp) {
-        const newUsers = [...users.users, {...users.tmp}];
+        let newUser = {
+            ...users.tmp,
+            wallet: JSON.parse(users.tmp.wallet.toString()),
+        };
+        const newUsers = [...users.users, newUser];
         users.users = newUsers;
         users.loggedInUser = `${users.tmp ? users.tmp.username : null}`;
     
@@ -66,19 +70,30 @@ export const loginUser = (
  */
 export const login = async (
     {
+        username,
+        wallet,
+        privateKey,
+        publicKey,
         e,
         users,
         onInfo,
         setUsers,
     }: {
-        e: Event,
-        users: UsersType,
+        username?: string,
+        wallet?: string,
+        publicKey?: string,
+        privateKey?: string,
+        e?: Event,
+        users?: UsersType,
         onInfo?: (info: InfoType | null) => void,
         setUsers?: (u: UsersType) => void,
     },
 ): Promise<boolean> => {
-    e.preventDefault();
-    if (!users.tmp) return false;
+    if (e) { e.preventDefault(); }
+    
+    if ((!users || !users.tmp) && (
+        !username || !wallet || !privateKey || !publicKey
+    )) { return false; }
 
     const setInfo = onInfo ? onInfo : () => null;
 
@@ -87,20 +102,29 @@ export const login = async (
 
     // validate keypair
     try {
-        await validateKeypair(users.tmp.keypair);
+        if (publicKey && privateKey){
+            let keypair = { publicKey, privateKey };
+            await validateKeypair(keypair);
+        }
+        // for Svelte store compatibilty
+        if (users && users.tmp) {
+            await validateKeypair(users.tmp.keypair);
+        }
     } catch (e) {
         setInfo(makeInfoProps({ type: 'error', value: 'Keypair is invalid', loading: false }));
         return false;
     }
 
     // verify if already logged in
-    if (isAlreadyLogged(users)) {
+    // for Svelte store compatibilty
+    if (users && users.tmp && isAlreadyLogged(users)) {
         setInfo(makeInfoProps({ type: 'error', value: `${users.tmp.username} already logged in.`, loading: false }));
         return false;
     }
     
     // perform login action
-    loginUser({ users, setUsers });
+    // for Svelte store compatibilty
+    if (users) { loginUser({ users, setUsers }); }
 
     setInfo(makeInfoProps({ type: 'info', value: 'Successfully registered.', loading: false}));
     return true;

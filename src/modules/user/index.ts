@@ -24,8 +24,8 @@ export type Wallet = {
  * User locally managed.
  */
 export type User = {
-    id: string;
-    wallet: Wallet;
+    id?: string;
+    wallet: Wallet | string;
     keypair: Keypair;
     username: string;
     identity?: IdentityType;

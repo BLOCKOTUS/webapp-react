@@ -1,7 +1,12 @@
 import { Formik, Field, Form } from 'formik';
+import { connect } from 'react-redux';
 
 import type { ReactElement } from 'react';
 import type { FormikHelpers } from 'formik';
+
+import * as actions from '../../actions/users';
+import { login } from '../../modules/login';
+import type { User } from '../../modules/user';
 
 type FormLoginValues = {
     username: string,
@@ -10,15 +15,30 @@ type FormLoginValues = {
     privateKey: string,
 }
 
-const onSubmit = (
-    values: FormLoginValues,
-    { setSubmitting }: FormikHelpers<FormLoginValues>,
-): void => {
-    console.log({values});
-    setSubmitting(false);
-}
+const FormLogin = ({
+    loginUser,
+}: {
+    loginUser: (user: User) => void,
+}): ReactElement => {
 
-const FormLogin = (): ReactElement => {
+    const onSubmit = (
+        values: FormLoginValues,
+        { setSubmitting }: FormikHelpers<FormLoginValues>,
+    ): void => {
+        login(values).then(success => {
+            setSubmitting(false);
+            let user: User = {
+                username: values.username,
+                wallet: JSON.parse(values.wallet),
+                keypair: {
+                    privateKey: values.privateKey,
+                    publicKey: values.publicKey,
+                },
+            };
+            if (success) { loginUser(user); }
+        });
+    }
+
     return (
         <div>
             <Formik
@@ -50,4 +70,13 @@ const FormLogin = (): ReactElement => {
     )       
 };
 
-export default FormLogin;
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+      loginUser: (user: User) => dispatch(actions.loginUser(user)),
+    }
+  }
+
+export default connect(
+    null,
+    mapDispatchToProps,
+  )(FormLogin);

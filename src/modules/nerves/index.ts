@@ -23,7 +23,7 @@ export const request = ({
   params = {},
 }: {
   username?: string;
-  wallet?: Wallet;
+  wallet?: Wallet | string;
   method: 'POST' | 'GET';
   url: string;
   data?: Record<string, unknown>;
