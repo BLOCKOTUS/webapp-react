@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import {
   Switch,
   Route,
@@ -10,13 +11,15 @@ import View from '../../ui/view';
 
 import type { ReactElement } from 'react';
 
+import type { UsersType } from '../../modules/user';
+import type { State } from '../../store';
 
 const Kyc = (): ReactElement => {
     return (
       <div>
         <Switch>
           <Route exact path="/kyc">
-            <Init />
+            <ConnectedInit />
           </Route>
           <Route path="/kyc/me">
             <Me />
@@ -32,17 +35,22 @@ const Kyc = (): ReactElement => {
     );
 };
 
-const Init = (): ReactElement => {
+const Init = ({ users }: { users?: UsersType }): ReactElement => {
+
   const navItems = [
     { label: 'Home', to: '/' },
     { label: 'My identity', to: '/kyc/me' },
-    { label: 'Create identity', to: '/kyc/create' },
     { label: 'Verification jobs', to: '/kyc/jobs' },
+  ];
+
+  const navItemsNoIdentity = [
+    { label: 'Home', to: '/' },
+    { label: 'Create identity', to: '/kyc/create' },
   ];
 
   return (
     <View title="KYC">
-      <NavList items={navItems} />
+      <NavList items={users?.loggedInUser?.identity ? navItems : navItemsNoIdentity} />
       <ButtonBack />
     </View>
   );
@@ -72,5 +80,15 @@ const Jobs = (): ReactElement => {
     </View>
   );
 };
+
+const mapStateToProps = (state: State) => {
+  const { users } = state
+  return { users };
+}
+
+const ConnectedInit = connect(
+  mapStateToProps,
+  null,
+)(Init);
 
 export default Kyc;

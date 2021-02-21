@@ -4,7 +4,7 @@ import type { ChangeEvent, ReactElement } from 'react';
 import * as actions from '../../actions/users';
 
 import type { User, UsersType } from '../../modules/user';
-import type { State  } from '../../store';
+import type { State } from '../../store';
 
 const SelectLoggedUser = ({
     selectLoggedUser,
@@ -24,7 +24,7 @@ const SelectLoggedUser = ({
                         <option 
                             key={u.username} 
                             value={u.username} 
-                            selected={users?.loggedInUser === u.username}
+                            selected={users?.loggedInUser?.username === u.username}
                         >
                             {u.username}
                         </option>
@@ -39,13 +39,13 @@ const SelectLoggedUser = ({
 const mapDispatchToProps = (dispatch: any) => {
     return {
       selectLoggedUser: (username: string) => dispatch(actions.selectLoggedUser(username)),
-    }
-}
+    };
+};
 
 const mapStateToProps = (state: State) => {
     const { users } = state
     return { users };
-}
+};
 
 export default connect(
     mapStateToProps,

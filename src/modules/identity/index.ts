@@ -399,10 +399,9 @@ export const submitCreateIdentity = async (
     e.preventDefault();
     try {
         const success = await createIdentity({ citizen, user, onInfo });
-        if (success) {
-            let loggedInUser = users.users.filter(u => u.username === users.loggedInUser)[0];
-            const loggedIndex = users.users.indexOf(loggedInUser);
-            loggedInUser = { ...loggedInUser, identity: {...citizen} };
+        if (success && users.loggedInUser) {
+            const loggedIndex = users.users.indexOf(users.loggedInUser);
+            const loggedInUser = { ...users.loggedInUser, identity: {...citizen} };
             users.users[loggedIndex] = loggedInUser;
 
             if (setUsers) setUsers(users);

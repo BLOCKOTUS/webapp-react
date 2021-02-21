@@ -35,7 +35,7 @@ export type User = {
  * Users store for managing users locally.
  */
 export type UsersType = {
-    loggedInUser: string | null;
+    loggedInUser: User | null;
     users: Array<User>;
     tmp: User | null;
 };
@@ -93,7 +93,7 @@ const makeSharedWithObjectForWorkers = (
  * Return the logged in user, from the `users` store.
  */
 export const getLoggedInUser = (users: UsersType): User | false => {
-    return users.users.filter(u => u.username === users.loggedInUser)[0] || false;
+    return users.loggedInUser || false;
 }
 
 /**

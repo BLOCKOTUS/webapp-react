@@ -57,7 +57,7 @@ export const loginUser = (
         };
         const newUsers = [...users.users, newUser];
         users.users = newUsers;
-        users.loggedInUser = `${users.tmp ? users.tmp.username : null}`;
+        users.loggedInUser = users.tmp ? users.tmp : null;
     
         users.tmp = null;
         if (setUsers) setUsers(users);
