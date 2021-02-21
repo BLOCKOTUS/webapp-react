@@ -30,7 +30,7 @@ const crypt = new Crypt();
  * Promise implementation of rsa.generateKeyPair function.
  */
 export const generateKeyPair = (): Promise<Keypair> => {
-	const rsa = new RSA();
+    const rsa = new RSA();
     return new Promise((resolve) => {
         rsa.generateKeyPair(resolve);
     });

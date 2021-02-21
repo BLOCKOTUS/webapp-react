@@ -11,6 +11,18 @@ const initialState = {
 
 const users = (state: State = initialState, action: Action) => {
   switch (action.type) {
+    case 'users/deleteUser':
+      if (state && action.payload.username) {
+        return {
+          ...state,
+            loggedInUser: state.loggedInUser !== action.payload.username ? state.loggedInUser : null,
+            users: [
+              ...state.users.filter(u => u.username !== action.payload.username),
+            ],
+        };
+      }
+      return state;
+
     case 'users/selectLoggedUser':
       if (state && action.payload.username) {
         return {

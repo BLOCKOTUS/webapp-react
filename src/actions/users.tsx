@@ -1,5 +1,19 @@
 import type { User } from '../modules/user';
 
+export type UsersDeleteUserAction = {
+  type: "users/deleteUser",
+  payload: {
+    username: string,
+  },
+};
+
+export const deleteUser = (username: string): UsersDeleteUserAction => ({
+  type: "users/deleteUser",
+  payload: {
+    username,
+  },
+});
+
 export type UsersLoginUserAction = {
   type: "users/loginUser",
   payload: {
@@ -29,4 +43,5 @@ export const selectLoggedUser = (username: string): UsersSelectLoggedUserAction 
 });
 
 export type Action = UsersLoginUserAction
+  | UsersDeleteUserAction
   | UsersSelectLoggedUserAction;

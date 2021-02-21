@@ -93,8 +93,7 @@ const makeSharedWithObjectForWorkers = (
  * Return the logged in user, from the `users` store.
  */
 export const getLoggedInUser = (users: UsersType): User | false => {
-    let loggedIn = users.users.filter(u => u.username === users.loggedInUser);
-    return loggedIn[0] ? loggedIn[0] : false;
+    return users.users.filter(u => u.username === users.loggedInUser)[0] || false;
 }
 
 /**
