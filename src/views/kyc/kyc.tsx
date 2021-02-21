@@ -84,7 +84,7 @@ const Jobs = (): ReactElement => {
 const mapStateToProps = (state: State) => {
   const { users } = state
   return { users };
-}
+};
 
 const ConnectedInit = connect(
   mapStateToProps,

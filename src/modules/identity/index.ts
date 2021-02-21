@@ -34,7 +34,7 @@ export type IdentityType = {
     nationalId: string;
     birthdate: string;
     documentation: string;
-    uniqueHash: string;
+    uniqueHash?: string;
 }
 
 /**
@@ -387,9 +387,9 @@ export const submitCreateIdentity = async (
         onComplete,
         setUsers,
     }: {
-        e: Event,
+        e?: Event,
         user: User,
-        users: UsersType,
+        users?: UsersType,
         citizen: IdentityType,
         onInfo?: (info: InfoType | null) => void,
         onComplete?: () => void,
@@ -399,14 +399,14 @@ export const submitCreateIdentity = async (
     e.preventDefault();
     try {
         const success = await createIdentity({ citizen, user, onInfo });
-        if (success && users.loggedInUser) {
+        if (success && users && users.loggedInUser) {
             const loggedIndex = users.users.indexOf(users.loggedInUser);
             const loggedInUser = { ...users.loggedInUser, identity: {...citizen} };
             users.users[loggedIndex] = loggedInUser;
 
             if (setUsers) setUsers(users);
-            if (onComplete) onComplete();
         }
+        if (onComplete) onComplete();
         return success;
     } catch (e) {
         return false;

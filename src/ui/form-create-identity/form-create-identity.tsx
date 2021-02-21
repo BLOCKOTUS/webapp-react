@@ -1,6 +1,15 @@
+import { useState } from 'react';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
+import { connect } from 'react-redux';
+
+import InfoBar from '../info-bar';
+import { submitCreateIdentity } from '../../modules/identity';
 
 import type { ReactElement } from 'react';
+
+import type { InfoType } from '../../modules/info';
+import type { UsersType } from '../../modules/user';
+import type { State } from '../../store';
 
 type FormCreateIdentityValues = {
     firstname: string,
@@ -11,17 +20,33 @@ type FormCreateIdentityValues = {
     documentation: string,
 }
 
-const onSubmit = (
-    values: FormCreateIdentityValues,
-    { setSubmitting }: FormikHelpers<FormCreateIdentityValues>,
-): void => {
-    console.log({values});
-    setSubmitting(false);
-}
 
-const FormCreateIdentity = (): ReactElement => {
+const FormCreateIdentity = ({ users }: { users?: UsersType }): ReactElement => {
+    const [info, setInfo] = useState<InfoType | null>();
+
+    const onSubmit = (
+        values: FormCreateIdentityValues,
+        { setSubmitting }: FormikHelpers<FormCreateIdentityValues>,
+    ): void => {
+        if (users?.loggedInUser) {
+                submitCreateIdentity({
+                    user: users.loggedInUser,
+                    citizen: values,
+                    onInfo: setInfo,
+                })
+                .then(success => {
+                    if (success) {
+                        
+                    }
+                    setSubmitting(false);
+                })
+                .catch(() => setSubmitting(false));
+        }
+    };
+
     return (
         <div>
+            <InfoBar info={info} />
             <Formik
                 initialValues={{
                     firstname: '',
@@ -59,4 +84,12 @@ const FormCreateIdentity = (): ReactElement => {
     )       
 };
 
-export default FormCreateIdentity;
+const mapStateToProps = (state: State) => {
+    const { users } = state
+    return { users };
+}
+  
+export default connect(
+    mapStateToProps,
+    null,
+)(FormCreateIdentity);
