@@ -7,6 +7,7 @@ import {
 import * as actions from '../../actions/users';
 import ButtonBack from '../../ui/button-back';
 import FormCreateIdentity from '../../ui/form-create-identity';
+import Identity from '../../ui/identity';
 import NavList from '../../ui/navlist';
 import View from '../../ui/view';
 
@@ -24,7 +25,7 @@ const Kyc = (): ReactElement => {
             <ConnectedInit />
           </Route>
           <Route path="/kyc/me">
-            <Me />
+            <ConnectedMe />
           </Route>
           <Route path="/kyc/create">
             <ConnectedCreate />
@@ -58,9 +59,14 @@ const Init = ({ users }: { users?: UsersType }): ReactElement => {
   );
 };
 
-const Me = (): ReactElement => {
+const Me = ({
+  users,
+}: {
+  users?: UsersType,
+}): ReactElement => {
   return (
     <View title="Me">
+      <Identity identity={users?.loggedInUser?.identity} />
       <ButtonBack />
     </View>
   );
@@ -102,6 +108,11 @@ const ConnectedInit = connect(
   mapStateToProps,
   null,
 )(Init);
+
+const ConnectedMe = connect(
+  mapStateToProps,
+  null,
+)(Me);
 
 const ConnectedCreate = connect(
   null,

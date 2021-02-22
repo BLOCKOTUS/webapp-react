@@ -5,7 +5,7 @@ import appConfig from '../../config/app';
 import { request } from '../nerves';
 import type { RequestReponseObject } from '../nerves';
 import type { Encrypted, Keypair } from '../crypto';
-import type { IdentityType } from '../identity';
+import type { IdentityType, IdentityTypeWithKYC } from '../identity';
 import type { WorkerType } from '../job';
 
 /**
@@ -28,7 +28,7 @@ export type User = {
     wallet: Wallet | string;
     keypair: Keypair;
     username: string;
-    identity?: IdentityType;
+    identity?: IdentityTypeWithKYC;
 };
 
 /**

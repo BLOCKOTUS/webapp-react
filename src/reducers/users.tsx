@@ -1,5 +1,6 @@
 import type { Action } from '../actions/users';
 import type { UsersType } from '../modules/user';
+import type { Confirmations } from '../modules/identity';
 
 export type State = UsersType | null;
 
@@ -54,7 +55,11 @@ const users = (state: State = initialState, action: Action) => {
     case 'users/createIdentity':
       if (state && action.payload.identity && state.loggedInUser) {
         const createIdentityIndex = state.users.findIndex(u => u.username === state.loggedInUser?.username);
-        const createIdentityUser = { ...state.loggedInUser, identity: action.payload.identity };
+        const confirmations: Confirmations = [0, 0];
+        const createIdentityUser = { 
+          ...state.loggedInUser,
+          identity: { ...action.payload.identity, kyc: false, confirmations},
+        };
         const createIdentityUsers = state.users;
         createIdentityUsers[createIdentityIndex] = createIdentityUser;
         return {

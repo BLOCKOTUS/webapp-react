@@ -401,7 +401,8 @@ export const submitCreateIdentity = async (
         const success = await createIdentity({ citizen, user, onInfo });
         if (success && users && users.loggedInUser) {
             const loggedIndex = users.users.indexOf(users.loggedInUser);
-            const loggedInUser = { ...users.loggedInUser, identity: {...citizen} };
+            const confirmations: Confirmations = [0, 0];
+            const loggedInUser = { ...users.loggedInUser, identity: {...citizen, kyc: false, confirmations} };
             users.users[loggedIndex] = loggedInUser;
 
             if (setUsers) setUsers(users);
