@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import InfoBar from '../info-bar';
 import { submitCreateIdentity } from '../../modules/identity';
 
 import type { ReactElement } from 'react';
 
+import type { IdentityType } from '../../modules/identity';
 import type { InfoType } from '../../modules/info';
 import type { UsersType } from '../../modules/user';
 import type { State } from '../../store';
@@ -21,8 +23,16 @@ type FormCreateIdentityValues = {
 }
 
 
-const FormCreateIdentity = ({ users }: { users?: UsersType }): ReactElement => {
+const FormCreateIdentity = ({
+    users,
+    onSuccess,
+}: {
+    users?: UsersType,
+    onSuccess: (identity: IdentityType) => void,
+}): ReactElement => {
     const [info, setInfo] = useState<InfoType | null>();
+    
+    let history = useHistory();
 
     const onSubmit = (
         values: FormCreateIdentityValues,
@@ -35,8 +45,9 @@ const FormCreateIdentity = ({ users }: { users?: UsersType }): ReactElement => {
                     onInfo: setInfo,
                 })
                 .then(success => {
-                    if (success) {
-                        
+                    if (success) { 
+                        onSuccess(values);
+                        setTimeout(() => history.push('/kyc'), 1500);
                     }
                     setSubmitting(false);
                 })
@@ -51,10 +62,10 @@ const FormCreateIdentity = ({ users }: { users?: UsersType }): ReactElement => {
                 initialValues={{
                     firstname: '',
                     lastname: '',
-                    birthdate: '',
+                    birthdate: '1992-01-01',
                     nation: '',
                     nationalId: '',
-                    documentation: '',
+                    documentation: 'https://imgur.com/a/5a15vOr',
                 }}
                 onSubmit={onSubmit}
             >

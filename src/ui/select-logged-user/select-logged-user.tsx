@@ -18,13 +18,12 @@ const SelectLoggedUser = ({
 
     return (
         <div>
-            <select onChange={onChange}>
+            <select onChange={onChange} defaultValue={users?.loggedInUser?.username}>
                 { users?.users.map((u: User) => {
                     return (
                         <option 
                             key={u.username} 
                             value={u.username} 
-                            selected={users?.loggedInUser?.username === u.username}
                         >
                             {u.username}
                         </option>

@@ -21,7 +21,7 @@ const ListUserAccount = ({
     return (
         <Wrapper>
             {
-                users?.users.map((u: User) => <UserAccount user={u} />)
+                users?.users.map((u: User) => <UserAccount key={u.username} user={u} />)
             }
         </Wrapper>
     )

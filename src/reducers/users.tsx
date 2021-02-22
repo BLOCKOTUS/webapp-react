@@ -51,6 +51,20 @@ const users = (state: State = initialState, action: Action) => {
       }
       return state;
 
+    case 'users/createIdentity':
+      if (state && action.payload.identity && state.loggedInUser) {
+        const createIdentityIndex = state.users.findIndex(u => u.username === state.loggedInUser?.username);
+        const createIdentityUser = { ...state.loggedInUser, identity: action.payload.identity };
+        const createIdentityUsers = state.users;
+        createIdentityUsers[createIdentityIndex] = createIdentityUser;
+        return {
+          ...state,
+          loggedInUser: createIdentityUser,
+          users: createIdentityUsers,
+        };
+      }
+      return state;
+
     default:
       return state;
   }

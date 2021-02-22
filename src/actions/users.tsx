@@ -1,4 +1,5 @@
 import type { User } from '../modules/user';
+import type { IdentityType } from '../modules/identity';
 
 export type UsersDeleteUserAction = {
   type: "users/deleteUser",
@@ -42,6 +43,21 @@ export const selectLoggedUser = (username: string): UsersSelectLoggedUserAction 
   },
 });
 
+export type UsersCreateIdentityAction = {
+  type: "users/createIdentity",
+  payload: {
+    identity: IdentityType,
+  },
+};
+
+export const createIdentity = (identity: IdentityType): UsersCreateIdentityAction => ({
+  type: "users/createIdentity",
+  payload: {
+    identity,
+  },
+});
+
 export type Action = UsersLoginUserAction
+  | UsersCreateIdentityAction
   | UsersDeleteUserAction
   | UsersSelectLoggedUserAction;

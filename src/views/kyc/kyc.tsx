@@ -4,6 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 
+import * as actions from '../../actions/users';
 import ButtonBack from '../../ui/button-back';
 import FormCreateIdentity from '../../ui/form-create-identity';
 import NavList from '../../ui/navlist';
@@ -13,6 +14,7 @@ import type { ReactElement } from 'react';
 
 import type { UsersType } from '../../modules/user';
 import type { State } from '../../store';
+import { IdentityType } from '../../modules/identity';
 
 const Kyc = (): ReactElement => {
     return (
@@ -25,7 +27,7 @@ const Kyc = (): ReactElement => {
             <Me />
           </Route>
           <Route path="/kyc/create">
-            <Create />
+            <ConnectedCreate />
           </Route>
           <Route path="/kyc/jobs">
             <Jobs />
@@ -64,10 +66,14 @@ const Me = (): ReactElement => {
   );
 };
 
-const Create = (): ReactElement => {
+const Create = ({
+  createIdentity,
+}: {
+  createIdentity: (identity: IdentityType) => void,
+}): ReactElement => {
   return (
     <View title="Create">
-      <FormCreateIdentity />
+      <FormCreateIdentity onSuccess={createIdentity} />
       <ButtonBack />
     </View>
   );
@@ -86,9 +92,20 @@ const mapStateToProps = (state: State) => {
   return { users };
 };
 
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    createIdentity: (identity: IdentityType) => dispatch(actions.createIdentity(identity)),
+  }
+};
+
 const ConnectedInit = connect(
   mapStateToProps,
   null,
 )(Init);
+
+const ConnectedCreate = connect(
+  null,
+  mapDispatchToProps,
+)(Create);
 
 export default Kyc;
