@@ -396,7 +396,7 @@ export const submitCreateIdentity = async (
         setUsers?: (u: UsersType) => void,
     },
 ): Promise<boolean> => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     try {
         const success = await createIdentity({ citizen, user, onInfo });
         if (success && users && users.loggedInUser) {

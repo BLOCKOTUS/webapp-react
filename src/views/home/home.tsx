@@ -10,6 +10,7 @@ import type { State } from '../../store';
 const Home = ({ users }: { users?: UsersType }): ReactElement => {
 
   const navItems = [
+    { label: 'Register', to: '/register' },
     { label: 'Manage accounts', to: '/accounts' },
     { label: 'KYC', to: '/kyc' },
     { label: 'Test DID Url', to: '/' },
