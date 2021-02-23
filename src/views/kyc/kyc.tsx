@@ -4,10 +4,10 @@ import {
   Route,
 } from "react-router-dom";
 
+import Me from './me';
 import * as actions from '../../actions/users';
 import ButtonBack from '../../ui/button-back';
 import FormCreateIdentity from '../../ui/form-create-identity';
-import Identity from '../../ui/identity';
 import NavList from '../../ui/navlist';
 import View from '../../ui/view';
 
@@ -25,7 +25,7 @@ const Kyc = (): ReactElement => {
             <ConnectedInit />
           </Route>
           <Route path="/kyc/me">
-            <ConnectedMe />
+            <Me />
           </Route>
           <Route path="/kyc/create">
             <ConnectedCreate />
@@ -54,19 +54,6 @@ const Init = ({ users }: { users?: UsersType }): ReactElement => {
   return (
     <View title="KYC">
       <NavList items={users?.loggedInUser?.identity ? navItems : navItemsNoIdentity} />
-      <ButtonBack />
-    </View>
-  );
-};
-
-const Me = ({
-  users,
-}: {
-  users?: UsersType,
-}): ReactElement => {
-  return (
-    <View title="Me">
-      <Identity identity={users?.loggedInUser?.identity} />
       <ButtonBack />
     </View>
   );
@@ -108,11 +95,6 @@ const ConnectedInit = connect(
   mapStateToProps,
   null,
 )(Init);
-
-const ConnectedMe = connect(
-  mapStateToProps,
-  null,
-)(Me);
 
 const ConnectedCreate = connect(
   null,
