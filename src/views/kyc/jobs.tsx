@@ -1,45 +1,42 @@
 import { connect } from 'react-redux';
 import { useState, useEffect } from 'react';
 
-import { getMyIdentity } from '../../modules/identity';
+import { getMyJobs } from '../../modules/job';
 import ButtonBack from '../../ui/button-back';
-import Identity from '../../ui/identity';
 import InfoBar from '../../ui/info-bar';
 import View from '../../ui/view';
 
 import type { ReactElement } from 'react';
 
 import type { UsersType } from '../../modules/user';
-import type { IdentityTypeWithKYC } from '../../modules/identity';
+import type { JobList } from '../../modules/job';
 import type { InfoType } from '../../modules/info';
 import type { State } from '../../store';
 
-const Me = ({
+const Jobs = ({
   users,
 }: {
   users?: UsersType,
 }): ReactElement => {
-  const [identity, setIdentity] = useState<IdentityTypeWithKYC | null>();
+  const [jobs, setJobs] = useState<JobList | null>();
   // const [identity, setIdentity] = useState<IdentityTypeWithKYC | null>(users?.loggedInUser?.identity?);
   const [info, setInfo] = useState<InfoType | null>();
 
   useEffect(() => {
-    const pullIdentityFromNetwork = async () => {
+    const pullJobsFromNetwork = async () => {
       if (users && users.loggedInUser) {
-        const response = await getMyIdentity({ user: users.loggedInUser, onInfo: setInfo });
-        response && setIdentity(response);
+        const response = await getMyJobs({ user: users.loggedInUser, onInfo: setInfo, status: 'pending' });
+        response && setJobs(response);
+
+        console.log(response);
       }
     };
-    pullIdentityFromNetwork();
+    pullJobsFromNetwork();
   }, [users]);
 
   return (
-    <View title="Me">
+    <View title="Jobs">
       <InfoBar info={info} />
-      { identity
-        ? (<Identity identity={identity} />)
-        : (<></>)
-      }
       <ButtonBack />
     </View>
   );
@@ -53,4 +50,4 @@ const mapStateToProps = (state: State) => {
 export default connect(
   mapStateToProps,
   null,
-)(Me);;
+)(Jobs);;

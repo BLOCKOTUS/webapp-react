@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 
 import Me from './me';
+import Jobs from './jobs';
 import * as actions from '../../actions/users';
 import ButtonBack from '../../ui/button-back';
 import FormCreateIdentity from '../../ui/form-create-identity';
@@ -67,14 +68,6 @@ const Create = ({
   return (
     <View title="Create">
       <FormCreateIdentity onSuccess={createIdentity} />
-      <ButtonBack />
-    </View>
-  );
-};
-
-const Jobs = (): ReactElement => {
-  return (
-    <View title="Jobs">
       <ButtonBack />
     </View>
   );

@@ -35,10 +35,13 @@ type JobResponseObject = {
     job: JobType;
 };
 
+
+export type JobList = Array<{jobId: string}>;
+
 /**
  * Data returned by the network when requesting a job list.
  */
-type JobListResponseObject = { list: Array<{jobId: string}> };
+type JobListResponseObject = { list: JobList };
 
 /**
  * Data returned by the network when posting a new job.
@@ -221,3 +224,37 @@ export const getJobList = (
             status,
         },
     });
+
+export const getMyJobs = async (
+    {
+        user,
+        chaincode,
+        key,
+        status,
+        onInfo,
+    }: {
+        user: User,
+        chaincode?: string,
+        key?: string,
+        status?: string,
+        onInfo?: (info: InfoType | null) => void,
+    }): Promise<JobList | false> => {
+    const setInfo = onInfo ? onInfo : () => null;
+
+    setInfo(makeInfoProps({ type: 'info', value: 'Querying job list...', loading: true }));
+    
+    try {
+        const resJobList = await getJobList({user, status: 'pending'});
+        if (!resJobList || !resJobList.data.success) {
+            setInfo(makeInfoProps({ type: 'error', value: resJobList.data.message || 'error', loading: false }));
+            return false;
+        }
+    
+        if (resJobList.data.list.length === 0) setInfo(makeInfoProps({ type: 'info', value: 'You have no job assigned.', loading: false }));
+        else setInfo(makeInfoProps({ type: 'info', value: '', loading: false }));
+        return resJobList.data.list;
+    } catch (e) {
+        setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
+        return false;
+    }
+}
