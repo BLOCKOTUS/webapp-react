@@ -42,7 +42,7 @@ const ListJobs = ({
             <table>
                 <tbody>
                     {
-                        jobList?.map((job: JobListItemType, index: number) => <ListJobItem key={index} index={index} job={job} />)
+                        jobList && jobList?.map((job: JobListItemType, index: number) => <ListJobItem key={index} index={index} job={job} />)
                     }
                 </tbody>
             </table>

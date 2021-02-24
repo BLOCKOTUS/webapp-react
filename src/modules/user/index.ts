@@ -5,7 +5,7 @@ import appConfig from '../../config/app';
 import { request } from '../nerves';
 import type { RequestReponseObject } from '../nerves';
 import type { Encrypted, Keypair } from '../crypto';
-import type { IdentityType, IdentityTypeWithKYC } from '../identity';
+import type { IdentityTypeWithKYC } from '../identity';
 import type { WorkerType } from '../job';
 
 /**
