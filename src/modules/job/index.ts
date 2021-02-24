@@ -230,16 +230,18 @@ export const getMyJobs = async (
     {
         user,
         onInfo,
+        status,
     }: {
         user: User,
         onInfo?: (info: InfoType | null) => void,
+        status: string,
     }): Promise<JobList | false> => {
     const setInfo = onInfo ? onInfo : () => null;
 
     setInfo(makeInfoProps({ type: 'info', value: 'Querying job list...', loading: true }));
     
     try {
-        const resJobList = await getJobList({user, status: 'pending'});
+        const resJobList = await getJobList({ user, status });
         if (!resJobList || !resJobList.data.success) {
             setInfo(makeInfoProps({ type: 'error', value: resJobList.data.message || 'error', loading: false }));
             return false;
