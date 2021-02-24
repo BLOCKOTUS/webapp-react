@@ -39,7 +39,6 @@ type JobResponseObject = {
 export type JobListItemType = { jobId: string };
 export type JobList = Array<JobListItemType>;
 
-
 /**
  * Data returned by the network when requesting a job list.
  */

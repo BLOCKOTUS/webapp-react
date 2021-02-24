@@ -102,18 +102,3 @@ tr {
 th, td {
   border: none;
 }
-
-:global(.button button) {
-  width: 42vw !important;
-font-size: 30px;
-border-radius: 4.2%;
-  margin: 5px;
-}
-
-:global(.button button:hover) {
-  background-color: #fafafa;
-} 
-
-:global(.button button:active) {
-  transform: translateY(4px);
-}
