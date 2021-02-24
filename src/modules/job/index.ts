@@ -229,15 +229,9 @@ export const getJobList = (
 export const getMyJobs = async (
     {
         user,
-        chaincode,
-        key,
-        status,
         onInfo,
     }: {
         user: User,
-        chaincode?: string,
-        key?: string,
-        status?: string,
         onInfo?: (info: InfoType | null) => void,
     }): Promise<JobList | false> => {
     const setInfo = onInfo ? onInfo : () => null;
