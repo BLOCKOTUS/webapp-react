@@ -36,7 +36,9 @@ type JobResponseObject = {
 };
 
 
-export type JobList = Array<{jobId: string}>;
+export type JobListItemType = { jobId: string };
+export type JobList = Array<JobListItemType>;
+
 
 /**
  * Data returned by the network when requesting a job list.
@@ -249,9 +251,10 @@ export const getMyJobs = async (
             setInfo(makeInfoProps({ type: 'error', value: resJobList.data.message || 'error', loading: false }));
             return false;
         }
-    
-        if (resJobList.data.list.length === 0) setInfo(makeInfoProps({ type: 'info', value: 'You have no job assigned.', loading: false }));
-        else setInfo(makeInfoProps({ type: 'info', value: '', loading: false }));
+        if (resJobList.data.list.length === 0) {
+            setInfo(makeInfoProps({ type: 'info', value: 'You have no job assigned.', loading: false }));
+        }
+        else { setInfo(null); }
         return resJobList.data.list;
     } catch (e) {
         setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));

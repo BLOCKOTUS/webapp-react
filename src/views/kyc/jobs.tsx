@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getMyJobs } from '../../modules/job';
 import ButtonBack from '../../ui/button-back';
 import InfoBar from '../../ui/info-bar';
+import ListJobs from '../../ui/list-jobs';
 import View from '../../ui/view';
 
 import type { ReactElement } from 'react';
@@ -18,8 +19,7 @@ const Jobs = ({
 }: {
   users?: UsersType,
 }): ReactElement => {
-  const [jobs, setJobs] = useState<JobList | null>();
-  // const [identity, setIdentity] = useState<IdentityTypeWithKYC | null>(users?.loggedInUser?.identity?);
+  const [jobs, setJobs] = useState<JobList>();
   const [info, setInfo] = useState<InfoType | null>();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Jobs = ({
         const response = await getMyJobs({ user: users.loggedInUser, onInfo: setInfo, status: 'pending' });
         response && setJobs(response);
 
-        console.log(response);
+        // todo: useState for jobList - will be used for job verification view
       }
     };
     pullJobsFromNetwork();
@@ -37,6 +37,7 @@ const Jobs = ({
   return (
     <View title="Jobs">
       <InfoBar info={info} />
+      <ListJobs jobList={jobs} />
       <ButtonBack />
     </View>
   );
