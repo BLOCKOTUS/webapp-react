@@ -6,6 +6,7 @@ import {
 
 import Me from './me';
 import Jobs from './jobs';
+import Verify from './verify';
 import * as actions from '../../actions/users';
 import ButtonBack from '../../ui/button-back';
 import FormCreateIdentity from '../../ui/form-create-identity';
@@ -33,6 +34,9 @@ const Kyc = (): ReactElement => {
           </Route>
           <Route path="/kyc/jobs">
             <Jobs />
+          </Route>
+          <Route path="/kyc/verify/:key">
+            <Verify />
           </Route>
         </Switch>
       </div>
