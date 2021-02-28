@@ -4,10 +4,9 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import reducer from './reducers';
-import type { State } from './reducers';
-import type { Action } from './actions';
 
-export type { State, Action };
+export type { State } from './reducers';
+export type { Action } from './actions';
 
 const persistConfig = {
   key: 'root',

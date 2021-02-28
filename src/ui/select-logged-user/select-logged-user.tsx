@@ -18,7 +18,7 @@ const SelectLoggedUser = ({
 
     return (
         <div>
-            <select onChange={onChange} defaultValue={users?.loggedInUser?.username}>
+            <select onChange={onChange} value={users?.loggedInUser?.username}>
                 { users?.users.map((u: User) => {
                     return (
                         <option 
