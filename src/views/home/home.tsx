@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import type { ReactElement } from 'react';
 
+import { testDidUrl } from '../../modules/did';
 import NavList from '../../ui/navlist';
 import View from '../../ui/view';
 
@@ -9,11 +10,13 @@ import type { State } from '../../store';
 
 const Home = ({ users }: { users?: UsersType }): ReactElement => {
 
+  const user = users?.loggedInUser;
+
   const navItems = [
     { label: 'Register', to: '/register' },
     { label: 'Manage accounts', to: '/accounts' },
     { label: 'KYC', to: '/kyc' },
-    { label: 'Test DID Url', to: '/' },
+    { label: 'Test DID Url', onClick: user ? () => testDidUrl(user) : undefined},
   ];
 
   const navItemsGuest = [
