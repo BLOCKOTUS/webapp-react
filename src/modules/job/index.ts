@@ -36,7 +36,7 @@ type JobResponseObject = {
 };
 
 
-export type JobListItemType = { jobId: string };
+export type JobListItemType = { jobId: string, status: string };
 export type JobList = Array<JobListItemType>;
 
 /**

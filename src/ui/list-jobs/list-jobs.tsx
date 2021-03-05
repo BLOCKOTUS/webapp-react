@@ -27,7 +27,7 @@ const ListJobItem = ({
     return (
         <tr>
 			<td>{job.jobId}</td>
-			<td>pending</td>
+			<td>{job.status}</td>
 			<td><Button label="verify" onClick={() => onClickVerify(index)}></Button></td>
 		</tr>
     )
