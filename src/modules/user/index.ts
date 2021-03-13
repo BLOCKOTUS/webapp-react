@@ -32,7 +32,7 @@ export type User = {
 };
 
 /**
- * User document as return by the network.
+ * User document as returned by the network.
  */
 export type UserDocument = {
     id: string;

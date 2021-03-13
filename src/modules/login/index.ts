@@ -69,7 +69,7 @@ export const loginUser = (
  * Used for the onClick event of the `login` button on Login page.
  * It validates the inputted keypair and perform the login action.
  */
- export const login = async (
+export const login = async (
     {
         username,
         wallet,
