@@ -31,18 +31,10 @@ const FormLogin = ({
         { setSubmitting }: FormikHelpers<FormLoginValues>,
     ): void => {
         login({ ...values, onInfo: setInfo })
-            .then(success => {
+            .then(user => {
                 setSubmitting(false);
-                if (success) { 
+                if (user) { 
                     try {
-                        let user: User = {
-                            username: values.username,
-                            wallet: JSON.parse(values.wallet),
-                            keypair: {
-                                privateKey: values.privateKey,
-                                publicKey: values.publicKey,
-                            },
-                        };
                         loginUser(user); 
                     } catch (e) {
 

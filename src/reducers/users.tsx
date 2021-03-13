@@ -31,7 +31,10 @@ const users = (state: State = initialState, action: Action) => {
           loggedInUser: state.users.filter(u => u.username === action.payload.username)[0],
         };
       }
-      return state;
+      return {
+        ...state,
+        loggedInUser: null,
+      };
 
     case 'users/loginUser':
       if (state && action.payload.user) {

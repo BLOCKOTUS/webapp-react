@@ -32,6 +32,17 @@ export type User = {
 };
 
 /**
+ * User document as return by the network.
+ */
+export type UserDocument = {
+    id: string;
+    lastJobAttribution: number;
+    publicKey: string;
+    registryDate: number;
+    username: string;
+};
+
+/**
  * Users store for managing users locally.
  */
 export type UsersType = {
@@ -46,23 +57,29 @@ export type UsersType = {
 export type SharedWithKeypair = Record<string, { keypair: Encrypted }>;
 
 /**
- * Data returned by the network when requesting a keypair.
+ * Data returned by the network when requesting a keypair, or a user.
  */
-type UserKeypairResponseObject = { 
+ type UserKeypairResponseObject = { 
     keypair: Encrypted;
 };
 
+type UserResponseObject = { 
+    data: UserDocument;
+};
+
 /**
- * Object returned by the network requesting or submitting a keypair.
+ * Object returned by the network requesting or submitting a keypair, or getting a user.
  */
 export type RequestUserKeypairResponseObject = RequestReponseObject & UserKeypairResponseObject;
 export type RequestPostKeypairResponseObject = RequestReponseObject;
+export type RequestGetUserResponseObject = RequestReponseObject & UserResponseObject;
 
 /**
  * Object returned by Axios requesting or submitting a keypair.
  */
 export type RequestUserKeypairResponse = AxiosResponse<RequestUserKeypairResponseObject>;
 export type RequestPostKeypairResponse = AxiosResponse<RequestPostKeypairResponseObject>;
+export type RequestGetUserResponse = AxiosResponse<RequestGetUserResponseObject>;
 
 const crypt = new Crypt();
 
@@ -171,3 +188,16 @@ export const decryptKeypair = (
         return false;
     }
 };
+
+export const getUserDocument = (
+    {
+        user,
+    }: {
+        user: User,
+    }
+): Promise<RequestGetUserResponse> => request({
+    username: user.username,
+    wallet: user.wallet,
+    url: appConfig.nerves.user.url,
+    method: 'GET'
+});

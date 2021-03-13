@@ -47,6 +47,7 @@ export const uniqueHashFromIdentity = (identity: IdentityType | IdentityTypeWith
  */
 export const validateKeypair = async (keypair: Keypair): Promise<boolean> => {
     return new Promise((resolve, reject) => {
+
         if(!keypair.privateKey || !keypair.publicKey) {
             reject(false);
             return;
@@ -59,6 +60,7 @@ export const validateKeypair = async (keypair: Keypair): Promise<boolean> => {
         } catch (e) {
             reject(false);
         }
+        resolve(true);
         return;
     });
 };

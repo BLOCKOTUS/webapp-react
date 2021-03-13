@@ -4,6 +4,7 @@ import appConfig from '../../config/app';
 import { validateKeypair, generateKeyPair } from '../crypto';
 import { makeInfoProps } from '../info';
 import { request } from '../nerves';
+import { getUserDocument } from '../user';
 import type { User, UsersType, Wallet } from '../user';
 import type { InfoType } from '../info';
 import type { Keypair } from '../crypto';
@@ -68,7 +69,76 @@ export const loginUser = (
  * Used for the onClick event of the `login` button on Login page.
  * It validates the inputted keypair and perform the login action.
  */
-export const login = async (
+ export const login = async (
+    {
+        username,
+        wallet,
+        privateKey,
+        publicKey,
+        e,
+        onInfo,
+        setUsers,
+    }: {
+        username?: string,
+        wallet?: string,
+        publicKey?: string,
+        privateKey?: string,
+        e?: Event,
+        onInfo?: (info: InfoType | null) => void,
+        setUsers?: (u: UsersType) => void,
+    },
+): Promise<User | false> => {
+    if (e) { e.preventDefault(); }
+
+    const setInfo = onInfo ? onInfo : () => null;
+    
+    if (
+        !username || !wallet || !privateKey || !publicKey
+    ) { 
+        setInfo(makeInfoProps({ type: 'error', value: 'Data is incomplete.', loading: false }));
+        return false; 
+    }
+
+    // set info loading
+    setInfo(makeInfoProps({ type: 'info', value: '', loading: true }));
+    
+    // validate keypair
+    try {
+        const keypair = { 
+            publicKey: publicKey.replace(/(?:\\r\\n)/g, '\n'),
+            privateKey: privateKey.replace(/(?:\\r\\n)/g, '\n')
+        };
+
+        await validateKeypair(keypair);
+        
+        // pull user document
+        setInfo(makeInfoProps({ type: 'info', value: 'Pulling user document', loading: true }));
+
+        let user: User = {
+            keypair,
+            username,
+            wallet: JSON.parse(wallet)
+        };
+            
+        const userDocument = await getUserDocument({user});
+
+        if (userDocument.data.data.id) { user = { ...user, id: userDocument.data.data.id }}
+
+        setInfo(makeInfoProps({ type: 'info', value: 'Successfully logged in.', loading: false}));
+        return user;
+    } catch (e) {
+        setInfo(makeInfoProps({ type: 'error', value: e.message, loading: false }));
+        return false;
+    }
+
+};
+
+/**
+ * Svelte Specific
+ * Used for the onClick event of the `login` button on Login page.
+ * It validates the inputted keypair and perform the login action.
+ */
+ export const loginSvelte = async (
     {
         username,
         wallet,
@@ -103,10 +173,15 @@ export const login = async (
     // set info loading
     setInfo(makeInfoProps({ type: 'info', value: '', loading: true }));
 
+    
     // validate keypair
+    let keypair;
     try {
         if (publicKey && privateKey){
-            let keypair = { publicKey, privateKey };
+            keypair = { 
+                publicKey: publicKey.replace(/(?:\\r\\n)/g, '\n'),
+                privateKey: privateKey.replace(/(?:\\r\\n)/g, '\n')
+            };
             await validateKeypair(keypair);
         }
         // for Svelte store compatibilty
@@ -127,9 +202,11 @@ export const login = async (
     
     // perform login action
     // for Svelte store compatibilty
-    if (users) { loginUser({ users, setUsers }); }
-
-    setInfo(makeInfoProps({ type: 'info', value: 'Successfully registered.', loading: false}));
+    if (users) { 
+        loginUser({ users, setUsers }); 
+    }
+    
+    setInfo(makeInfoProps({ type: 'info', value: 'Successfully logged in.', loading: false}));
     return true;
 };
 
