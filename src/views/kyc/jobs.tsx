@@ -30,6 +30,7 @@ const Jobs = ({
   useEffect(() => {
     const pullJobsFromNetwork = async () => {
       if (users && users.loggedInUser) {
+        setJobList([]);
         const response = await getMyJobs({ user: users.loggedInUser, onInfo: setInfo, status: 'pending' });
         response && setJobList(response);
       }

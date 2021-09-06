@@ -27,7 +27,7 @@ const InfoBar = ({
     return info
         ? (
             <Wrapper type={info.type}>
-                { info.value }
+                <p>{ info.value }</p>
                 { info.loading && (<Heart />) }
             </Wrapper>
         )

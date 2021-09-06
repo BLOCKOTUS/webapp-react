@@ -46,6 +46,7 @@ const Verify = ({
     const pullJobFromNetwork = async () => {
       if (users && users.loggedInUser && params.key && jobs && jobs.list[Number(params.key)]) {
         setJobId(jobs.list[Number(params.key)].jobId);
+        setJob(false);
         if (!jobId) { return; }
         const response = await getIdentityVerificationJob({ 
           jobId,

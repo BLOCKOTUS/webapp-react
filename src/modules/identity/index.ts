@@ -285,12 +285,14 @@ export const getIdentityVerificationJob = async (
 
     try {
         // get job
+        setInfo(makeInfoProps({ type: 'info', value: 'Querying job...', loading: true }));
+
         const resJob = await getJob({ user, jobId });
         if( !resJob || !resJob.data.success) {
           setInfo(makeInfoProps({ type: 'error', value: resJob.data.message || 'error', loading: false }));
           return false;
         }
-        setInfo(makeInfoProps({ type: 'info', value: resJob.data.message, loading: true }));
+        setInfo(makeInfoProps({ type: 'info', value: `${resJob.data.message} Querying keypair...`, loading: true }));
         const job = resJob.data.job;
     
         // get shared keypair to decrypt the job
@@ -300,7 +302,7 @@ export const getIdentityVerificationJob = async (
             setInfo(makeInfoProps({ type: 'error', value: resEncryptedKeypair.data.message || 'error', loading: false }));
             return false;
         }
-        setInfo(makeInfoProps({ type: 'info', value: resEncryptedKeypair.data.message, loading: true }));
+        setInfo(makeInfoProps({ type: 'info', value: `${resEncryptedKeypair.data.message} Decrypting job...`, loading: true }));
         const sharedKeypair = decryptKeypair({ user, encryptedKeypair: resEncryptedKeypair.data.keypair });
         if (!sharedKeypair) {
             setInfo(makeInfoProps({ type: 'error', value: 'Cannot decrypt keypair.', loading: false }));
