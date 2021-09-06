@@ -20,12 +20,12 @@ This repository is part of the BLOCKOTUS Organism (https://github.com/BLOCKOTUS/
 ### Installation
 
 ```bash
-$ npm install # using `yarn` will cause an error with eslint - use NPM (2021/01/29)
+$ yarn
 ```
 ### Development
 
 ```bash
-$ npm start
+$ yarn start
 ```
 Then visit http://localhost:3000
 
