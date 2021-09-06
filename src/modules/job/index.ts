@@ -172,7 +172,7 @@ export const onClickApproveRefuse = async (
         setInfo(makeInfoProps({ type: 'info', value: 'Job complete. You will be redirected to the job list.', loading: true }));
         if (onComplete) onComplete();
         return true;
-    } catch (e) {
+    } catch (e: any | {message: string}) {
         setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
         return false;
     }
@@ -251,7 +251,7 @@ export const getMyJobs = async (
         }
         else { setInfo(null); }
         return resJobList.data.list;
-    } catch (e) {
+    } catch (e: any | {message: string}) {
         setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
         return false;
     }

@@ -126,7 +126,7 @@ export const login = async (
 
         setInfo(makeInfoProps({ type: 'info', value: 'Successfully logged in.', loading: false}));
         return user;
-    } catch (e) {
+    } catch (e: any | {message: string}) {
         setInfo(makeInfoProps({ type: 'error', value: e.message, loading: false }));
         return false;
     }
@@ -303,7 +303,7 @@ export const submitRegister = async (
         if (onComplete) onComplete();
     
         return user;
-    } catch (e) {
+    } catch (e: any | {message: string}) {
         setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
         return false;
     }

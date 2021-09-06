@@ -193,7 +193,7 @@ export const getMyIdentity = async (
             confirmations: resIdentity.data.identity.confirmations,
         };
         return identityWithKyc;
-    } catch (e) {
+    } catch (e: any | {message: string}) {
         setInfo(makeInfoProps({ type: 'error', value: e.message, loading: false }));
         return false;
     }
@@ -261,7 +261,7 @@ export const createIdentity = async (
             loading: false,
         }));
         return true;
-    } catch (e) {
+    } catch (e: any | {message: string}) {
         setInfo(makeInfoProps({ type: 'error', value: e.message, loading: false }));
         return false;
     }
@@ -335,7 +335,7 @@ export const getIdentityVerificationJob = async (
                 kyc: resCreatorIdentity.data.identity.kyc,
             },
         ];
-    } catch (e) {
+    } catch (e: any | {message: string}) {
         setInfo(makeInfoProps({ type: 'error', value: e.message || 'error', loading: false }));
         return false;
     }
